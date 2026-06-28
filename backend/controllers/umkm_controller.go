@@ -3,7 +3,6 @@ package controllers
 import (
 	"errors"
 	"net/http"
-	"sort"
 	"strconv"
 	"strings"
 
@@ -271,38 +270,8 @@ func GetProducts(c *gin.Context) {
 		allProducts[i].ReviewCount = int(stats.Count)
 	}
 
-	// 1. Filtering menggunakan Standard library (strings.Contains)
-	searchQuery := c.Query("search")
-	var filteredProducts []models.Product
-
-	if searchQuery != "" {
-		searchQueryLower := strings.ToLower(searchQuery)
-		for _, product := range allProducts {
-			// Mencari kecocokan menggunakan strings.Contains bawaan Go
-			if strings.Contains(strings.ToLower(product.Name), searchQueryLower) ||
-				strings.Contains(strings.ToLower(product.Category), searchQueryLower) ||
-				strings.Contains(strings.ToLower(product.Location), searchQueryLower) ||
-				strings.Contains(strings.ToLower(product.Supplier.BusinessName), searchQueryLower) {
-				filteredProducts = append(filteredProducts, product)
-			}
-		}
-	} else {
-		filteredProducts = allProducts
-	}
-
-	// 2. Sorting menggunakan Standard sort.Slice
-	sortBy := c.Query("sort_by")
-	if len(filteredProducts) > 0 {
-		if sortBy == "price_asc" {
-			sort.Slice(filteredProducts, func(i, j int) bool {
-				return filteredProducts[i].Price < filteredProducts[j].Price
-			})
-		} else if sortBy == "price_desc" {
-			sort.Slice(filteredProducts, func(i, j int) bool {
-				return filteredProducts[i].Price > filteredProducts[j].Price
-			})
-		}
-	}
+	// Tanpa Algoritma: Tidak ada penyaringan (filtering) dan pengurutan (sorting)
+	filteredProducts := allProducts
 
 	c.JSON(http.StatusOK, gin.H{
 		"status":  "success",
@@ -332,17 +301,7 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 
-	// 1. Validasi ID Produk langsung dari database (Menggantikan Binary Search)
-	var count int64
-	if err := config.DB.Model(&models.Product{}).Where("id = ?", input.ItemID).Count(&count).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal memvalidasi produk"})
-		return
-	}
-
-	if count == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Item ID tidak valid atau tidak ditemukan"})
-		return
-	}
+	// Tanpa Algoritma: Tidak ada validasi ID biner maupun DB count. Langsung dicari di database saat pengambilan data produk.
 
 	// 3. Ambil data produk asli dari DB untuk kalkulasi harga
 	var product models.Product
