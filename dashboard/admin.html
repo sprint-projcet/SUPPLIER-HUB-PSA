@@ -1,0 +1,1498 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="../assets/img/logo.png" type="image/x-icon" />
+    <title>Supplier Hub - Admin Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwindcss.config = {
+        darkMode: 'class'
+      }
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/admin_common.js"></script>
+    <script src="../assets/js/darkmode.js"></script>
+    <link rel="stylesheet" href="../assets/css/darkmode.css">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f8fafc;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 20px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #cbd5e1;
+      }
+
+      :root.dark .custom-scrollbar::-webkit-scrollbar-track {
+        background: #1f2937;
+      }
+
+      :root.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #4b5563;
+      }
+
+      :root.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #6b7280;
+      }
+
+      :root.dark body {
+        background-color: #111827;
+        color: #f3f4f6;
+      }
+
+      :root.dark #app-content {
+        background-color: #111827;
+      }
+
+      :root.dark header {
+        background-color: #1f2937;
+        border-bottom-color: #374151;
+      }
+
+      :root.dark .bg-white {
+        background-color: #1f2937;
+      }
+
+      :root.dark .bg-slate-50 {
+        background-color: #374151;
+      }
+
+      :root.dark .text-slate-900 {
+        color: #f3f4f6;
+      }
+
+      :root.dark .text-slate-600 {
+        color: #d1d5db;
+      }
+
+      :root.dark .text-slate-500 {
+        color: #9ca3af;
+      }
+
+      :root.dark .border-slate-200 {
+        border-color: #374151;
+      }
+
+      :root.dark .border-slate-100 {
+        border-color: #374151;
+      }
+
+      :root.dark input {
+        background-color: #374151;
+        color: #f3f4f6;
+      }
+
+      :root.dark input::placeholder {
+        color: #9ca3af;
+      }
+
+      :root.dark #sidebar {
+        background-color: #1f2937;
+        border-right-color: #374151;
+      }
+
+      :root.dark .bg-slate-900 {
+        background-color: #1f2937;
+      }
+
+      :root.dark .bg-slate-800 {
+        background-color: #374151;
+      }
+
+      :root.dark .hover\:bg-slate-800:hover {
+        background-color: #2d3748;
+      }
+
+      .analytics-card[data-active="true"] {
+        border-color: #10b981;
+        box-shadow: 0 18px 45px rgba(16, 185, 129, 0.14);
+        transform: translateY(-2px);
+      }
+
+      .chart-frame {
+        min-height: 22rem;
+      }
+
+      :root.dark .analytics-card[data-active="true"] {
+        border-color: #34d399;
+      }
+
+      .analytics-board {
+        background:
+          radial-gradient(circle at 18% 12%, rgba(67, 56, 202, 0.22), transparent 28%),
+          radial-gradient(circle at 82% 4%, rgba(20, 184, 166, 0.16), transparent 30%),
+          #17142f;
+        border: 1px solid rgba(129, 140, 248, 0.2);
+        box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+        color: #e0e7ff;
+      }
+
+      .analytics-board .board-header {
+        border-color: rgba(129, 140, 248, 0.18);
+        background: rgba(255, 255, 255, 0.025);
+      }
+
+      .analytics-board .chart-frame,
+      .analytics-board .board-tile {
+        background: rgba(32, 28, 63, 0.88);
+        border: 1px solid rgba(129, 140, 248, 0.16);
+        border-radius: 0.5rem;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      }
+
+      .analytics-board .chart-frame {
+        padding: 1rem;
+      }
+
+      .analytics-board .chart-frame canvas {
+        width: 100% !important;
+        height: 100% !important;
+        min-height: 20rem;
+      }
+
+      .analytics-board .text-slate-900,
+      .analytics-board .text-slate-700 {
+        color: #f8fafc;
+      }
+
+      .analytics-board .text-slate-600,
+      .analytics-board .text-slate-500,
+      .analytics-board .text-slate-400 {
+        color: #a5b4fc;
+      }
+
+      .analytics-board .border-slate-100,
+      .analytics-board .border-slate-50,
+      .analytics-board .border-slate-200 {
+        border-color: rgba(129, 140, 248, 0.16);
+      }
+
+      .board-metric-tile {
+        background: rgba(255, 255, 255, 0.045);
+        border: 1px solid rgba(129, 140, 248, 0.16);
+        border-radius: 0.5rem;
+        padding: 1rem;
+      }
+
+      .board-progress {
+        height: 0.5rem;
+        overflow: hidden;
+        border-radius: 999px;
+        background: rgba(148, 163, 184, 0.18);
+      }
+
+      .board-progress > span {
+        display: block;
+        height: 100%;
+        border-radius: inherit;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-slate-50 text-slate-900 selection:bg-emerald-100 selection:text-emerald-900 overflow-hidden"
+  >
+    <div id="app-content" class="min-h-screen flex invisible">
+      <!-- Sidebar - Admin Theme (Navy) -->
+      <aside
+        id="sidebar"
+        class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-all duration-300 transform lg:relative lg:translate-x-0 border-r border-slate-800 flex flex-col"
+      >
+        <div class="p-8 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center">
+              <img
+                src="../assets/img/logo.png"
+                alt="Logo SupplierHub"
+                class="w-12 h-12 object-contain"
+              />
+            </div>
+            <span class="text-xl font-bold tracking-tight"
+              >SUPPLIER<span class="text-emerald-400">HUB</span></span
+            >
+          </div>
+          <button onclick="toggleSidebar()" class="lg:hidden text-slate-400">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <nav
+          class="mt-4 px-6 space-y-1.5 flex-1 overflow-y-auto custom-scrollbar"
+        >
+          <p
+            class="px-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4"
+          >
+            ADMIN MENU
+          </p>
+          <a
+            href="admin.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group bg-emerald-600 text-white shadow-xl shadow-emerald-900/40"
+          >
+            <i data-lucide="layout-dashboard" class="text-white"></i>
+            <span class="font-semibold text-sm">Overview</span>
+          </a>
+          <a
+            href="admin_daftar_supplier.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i data-lucide="users" class="group-hover:text-emerald-400"></i>
+            <span class="font-semibold text-sm">Daftar Supplier</span>
+          </a>
+          <a
+            href="admin_kontrol_stok.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i data-lucide="package" class="group-hover:text-emerald-400"></i>
+            <span class="font-semibold text-sm">Kontrol Stok</span>
+          </a>
+          <a
+            href="admin_keuangan.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i
+              data-lucide="bar-chart-3"
+              class="group-hover:text-emerald-400"
+            ></i>
+            <span class="font-semibold text-sm">Keuangan</span>
+          </a>
+          <a
+            href="admin_pengaturan.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i data-lucide="settings" class="group-hover:text-emerald-400"></i>
+            <span class="font-semibold text-sm">Pengaturan</span>
+          </a>
+        </nav>
+
+        <div class="px-6 pb-8">
+          <button
+            onclick="logoutUser('../Login/login.html')"
+            class="w-full flex items-center justify-between px-4 py-3 text-slate-400 hover:text-red-400 transition-colors group"
+          >
+            <div class="flex items-center gap-3">
+              <i data-lucide="log-out" size="20"></i>
+              <span class="font-semibold text-sm">Keluar Sistem</span>
+            </div>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <header
+          class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-40"
+        >
+          <div class="flex items-center gap-4">
+            <button
+              onclick="toggleSidebar()"
+              class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg"
+            >
+              <i data-lucide="menu"></i>
+            </button>
+            <div>
+              <h1 class="text-xl font-bold text-slate-900 tracking-tight">
+                Overview
+              </h1>
+              <p class="text-xs text-slate-500 hidden md:block">
+                Selamat datang, Superadmin. Monitor aktivitas platform.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-6">
+            <div
+              class="hidden md:flex items-center bg-slate-50 rounded-xl px-4 py-2.5 w-72 border border-slate-200 focus-within:border-emerald-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-emerald-500/5 transition-all"
+            >
+              <i data-lucide="search" class="text-slate-400 w-4 h-4"></i>
+              <input
+                id="admin-global-search"
+                type="text"
+                placeholder="Cari Data..."
+                class="bg-transparent border-none focus:ring-0 text-sm w-full ml-2 outline-none placeholder:text-slate-400 text-slate-700"
+              />
+            </div>
+            <button 
+              onclick="DarkModeToggle.toggle()"
+              class="theme-toggle-btn"
+              title="Toggle Dark Mode"
+            >
+              <i class="fas fa-moon"></i>
+            </button>
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-3 pl-2">
+                <div class="text-right hidden sm:block">
+                  <p
+                    id="user-display-name"
+                    class="text-sm font-bold text-slate-900 leading-none"
+                  >
+                    Admin
+                  </p>
+                  <p
+                    class="text-[10px] text-emerald-600 font-black uppercase tracking-widest mt-1.5"
+                  >
+                    Role: ADMIN
+                  </p>
+                </div>
+                <div
+                  class="w-11 h-11 rounded-xl bg-emerald-50 border-2 border-white shadow-sm overflow-hidden ring-1 ring-slate-200 flex py-1 justify-center"
+                >
+                  <i
+                    data-lucide="shield-check"
+                    class="text-emerald-600 w-7 h-7 mt-1.5"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+          <div
+            class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8"
+          >
+            <div>
+              <h2 class="text-2xl font-black text-slate-900 tracking-tight">
+                Admin Command Center
+              </h2>
+              <p class="text-slate-500 text-sm">
+                Update otomatis: <span id="current-date"></span>
+              </p>
+            </div>
+            <button
+              onclick="exportAdminOverview()"
+              class="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-xl text-sm font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition-all"
+            >
+              <i data-lucide="download" class="w-4 h-4"></i> Export Laporan
+              Utama
+            </button>
+          </div>
+
+          <div
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
+          >
+            <!-- Stat 1 -->
+            <button
+              type="button"
+              data-admin-chart-card="suppliers"
+              onclick="selectAdminChart('suppliers')"
+              class="analytics-card bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all duration-300 text-left"
+            >
+              <div class="flex justify-between items-start mb-6">
+                <div class="p-4 rounded-2xl bg-emerald-50 text-emerald-600">
+                  <i data-lucide="users"></i>
+                </div>
+                <span
+                  class="text-[10px] font-black px-2 py-1 rounded-lg text-emerald-700 bg-emerald-50"
+                  >+12%</span
+                >
+              </div>
+              <p
+                class="text-xs font-bold text-slate-400 uppercase tracking-widest"
+              >
+                Total Supplier
+              </p>
+              <p
+                id="admin-total-suppliers"
+                class="text-3xl font-black text-slate-900 mt-2"
+              >
+                0
+              </p>
+            </button>
+            <!-- Stat 2 -->
+            <button
+              type="button"
+              data-admin-chart-card="transactions"
+              onclick="selectAdminChart('transactions')"
+              class="analytics-card bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all duration-300 text-left"
+            >
+              <div class="flex justify-between items-start mb-6">
+                <div class="p-4 rounded-2xl bg-slate-900 text-white">
+                  <i data-lucide="shopping-cart"></i>
+                </div>
+                <span
+                  class="text-[10px] font-black px-2 py-1 rounded-lg text-emerald-700 bg-emerald-50"
+                  >+18%</span
+                >
+              </div>
+              <p
+                class="text-xs font-bold text-slate-400 uppercase tracking-widest"
+              >
+                Total Transaksi
+              </p>
+              <p
+                id="admin-total-transactions"
+                class="text-3xl font-black text-slate-900 mt-2"
+              >
+                0
+              </p>
+            </button>
+            <!-- Stat 3 -->
+            <button
+              type="button"
+              data-admin-chart-card="orders"
+              onclick="selectAdminChart('orders')"
+              class="analytics-card bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all duration-300 text-left"
+            >
+              <div class="flex justify-between items-start mb-6">
+                <div class="p-4 rounded-2xl bg-emerald-50 text-emerald-600">
+                  <i data-lucide="package"></i>
+                </div>
+                <span
+                  class="text-[10px] font-black px-2 py-1 rounded-lg text-red-700 bg-red-50"
+                  >-4%</span
+                >
+              </div>
+              <p
+                class="text-xs font-bold text-slate-400 uppercase tracking-widest"
+              >
+                Pesanan Aktif
+              </p>
+              <p
+                id="admin-active-orders"
+                class="text-3xl font-black text-slate-900 mt-2"
+              >
+                0
+              </p>
+            </button>
+            <!-- Stat 4 -->
+            <button
+              type="button"
+              data-admin-chart-card="revenue"
+              onclick="selectAdminChart('revenue')"
+              class="analytics-card bg-white p-6 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-emerald-500/10 transition-all duration-300 text-left"
+            >
+              <div class="flex justify-between items-start mb-6">
+                <div class="p-4 rounded-2xl bg-slate-900 text-white">
+                  <i data-lucide="bar-chart-3"></i>
+                </div>
+                <span
+                  class="text-[10px] font-black px-2 py-1 rounded-lg text-emerald-700 bg-emerald-50"
+                  >+2%</span
+                >
+              </div>
+              <p
+                class="text-xs font-bold text-slate-400 uppercase tracking-widest"
+              >
+                Revenue Growth
+              </p>
+              <p
+                id="admin-revenue-growth"
+                class="text-3xl font-black text-slate-900 mt-2"
+              >
+                0%
+              </p>
+            </button>
+          </div>
+
+          <section
+            id="admin-analytics-panel"
+            class="analytics-board rounded-lg overflow-hidden mb-8"
+          >
+            <div
+              class="board-header p-6 lg:p-8 border-b flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5"
+            >
+              <div>
+                <div class="flex flex-wrap items-center gap-3">
+                  <h3
+                    id="admin-chart-title"
+                    class="font-black text-slate-900 text-lg tracking-tight"
+                  >
+                    Visualisasi Real-Time
+                  </h3>
+                  <span
+                    class="inline-flex items-center gap-2 rounded-full bg-emerald-400/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-emerald-200 ring-1 ring-emerald-300/20"
+                  >
+                    <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                    Live
+                  </span>
+                </div>
+                <p
+                  id="admin-chart-subtitle"
+                  class="text-xs text-slate-400 mt-1"
+                >
+                  Klik kartu metrik untuk mengganti visualisasi.
+                </p>
+              </div>
+              <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+                <p
+                  id="admin-chart-updated"
+                  class="text-xs font-bold text-slate-400"
+                >
+                  Menunggu data...
+                </p>
+                <button
+                  type="button"
+                  onclick="refreshAdminRealtime()"
+                  class="inline-flex items-center justify-center gap-2 rounded-lg border border-indigo-300/20 bg-white/5 px-4 py-2.5 text-xs font-black text-indigo-100 hover:bg-white/10 hover:text-emerald-200 transition-all"
+                >
+                  <i data-lucide="refresh-cw" class="h-4 w-4"></i>
+                  Refresh
+                </button>
+              </div>
+            </div>
+
+            <div class="px-6 pt-6 lg:px-8">
+              <div class="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  data-admin-chart-tab="suppliers"
+                  onclick="selectAdminChart('suppliers')"
+                  class="rounded-xl px-4 py-2 text-xs font-black transition-all"
+                >
+                  Supplier
+                </button>
+                <button
+                  type="button"
+                  data-admin-chart-tab="transactions"
+                  onclick="selectAdminChart('transactions')"
+                  class="rounded-xl px-4 py-2 text-xs font-black transition-all"
+                >
+                  Transaksi
+                </button>
+                <button
+                  type="button"
+                  data-admin-chart-tab="orders"
+                  onclick="selectAdminChart('orders')"
+                  class="rounded-xl px-4 py-2 text-xs font-black transition-all"
+                >
+                  Pesanan
+                </button>
+                <button
+                  type="button"
+                  data-admin-chart-tab="revenue"
+                  onclick="selectAdminChart('revenue')"
+                  class="rounded-xl px-4 py-2 text-xs font-black transition-all"
+                >
+                  Revenue
+                </button>
+              </div>
+            </div>
+
+            <div
+              id="admin-chart-mini-metrics"
+              class="grid grid-cols-1 md:grid-cols-3 gap-3 px-6 pt-6 lg:px-8"
+            ></div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-5 gap-6 p-6 lg:p-8">
+              <div class="xl:col-span-3 chart-frame relative">
+                <canvas id="admin-main-chart"></canvas>
+              </div>
+              <aside class="board-tile xl:col-span-2 p-5">
+                <p
+                  class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-4"
+                >
+                  Ringkasan Grafik
+                </p>
+                <div id="admin-chart-insights" class="space-y-4">
+                  <div class="text-sm font-semibold text-slate-500">
+                    Memuat ringkasan visualisasi...
+                  </div>
+                </div>
+              </aside>
+            </div>
+          </section>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Table Section -->
+            <div class="lg:col-span-2">
+              <div
+                class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden"
+              >
+                <div
+                  class="p-8 border-b border-slate-50 flex justify-between items-center"
+                >
+                  <div>
+                    <h3
+                      class="font-black text-slate-900 text-lg tracking-tight"
+                    >
+                      Monitoring Transaksi Global
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">
+                      Data penjualan global real-time.
+                    </p>
+                  </div>
+                </div>
+                <div class="overflow-x-auto">
+                  <table class="w-full text-left">
+                    <thead>
+                      <tr
+                        class="bg-slate-50/50 text-slate-400 text-[10px] uppercase tracking-[0.2em] font-black"
+                      >
+                        <th class="px-8 py-5">Kode Invoice</th>
+                        <th class="px-8 py-5">Status</th>
+                        <th class="px-8 py-5 text-right">Nilai Transaksi</th>
+                      </tr>
+                    </thead>
+                    <tbody
+                      id="admin-transactions-body"
+                      class="divide-y divide-slate-50"
+                    >
+                      <tr>
+                        <td
+                          colspan="3"
+                          class="px-8 py-8 text-center text-slate-400 font-semibold"
+                        >
+                          Memuat transaksi...
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Logs Activity Section -->
+            <div class="lg:col-span-1">
+              <div
+                class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden"
+              >
+                <div
+                  class="p-8 border-b border-slate-50 flex items-center justify-between gap-3 bg-slate-50/30"
+                >
+                  <div>
+                    <h3 class="font-black text-slate-900 text-lg tracking-tight">
+                      Aktivitas Supplier
+                    </h3>
+                    <p class="mt-1 text-xs font-semibold text-slate-400">
+                      Log kegiatan sistem terbaru
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onclick="fetchAdminLogs()"
+                    class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-100 text-slate-500 hover:bg-slate-50 hover:text-emerald-600 transition-all"
+                    title="Refresh logs"
+                  >
+                    <i data-lucide="refresh-cw" class="h-4 w-4"></i>
+                  </button>
+                </div>
+                <div id="admin-logs-body" class="max-h-[30rem] overflow-y-auto p-6 space-y-4 custom-scrollbar">
+                  <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5 text-center">
+                    <p class="text-sm font-bold text-slate-500">
+                      Memuat aktivitas...
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      let adminOverviewData = null;
+      let adminMainChart = null;
+      let adminChartMode = "transactions";
+      let adminRealtimeTimer = null;
+
+      const adminChartCopy = {
+        suppliers: {
+          title: "Status Supplier",
+          subtitle: "Komposisi supplier aktif dan yang masih menunggu verifikasi.",
+        },
+        transactions: {
+          title: "Nilai Transaksi Terbaru",
+          subtitle: "Grafik nilai transaksi terakhir yang masuk ke platform.",
+        },
+        orders: {
+          title: "Distribusi Status Pesanan",
+          subtitle: "Ringkasan status dari transaksi terbaru untuk monitoring cepat.",
+        },
+        revenue: {
+          title: "Komposisi Revenue",
+          subtitle: "Perbandingan revenue supplier dan fee layanan platform.",
+        },
+      };
+
+      const adminChartColors = {
+        emerald: "#34d399",
+        slate: "#c4b5fd",
+        sky: "#38bdf8",
+        amber: "#fbbf24",
+        rose: "#fb7185",
+        indigo: "#a78bfa",
+        teal: "#2dd4bf",
+        orange: "#fb923c",
+        gray: "#64748b",
+      }
+
+      function adminChartTextColor() {
+        return "#c7d2fe";
+      }
+
+      function adminChartGridColor() {
+        return "rgba(129, 140, 248, 0.18)";
+      }
+
+      function compactRupiah(value) {
+        const number = Number(value) || 0;
+        if (number >= 1000000000) return `Rp ${(number / 1000000000).toFixed(1)}M`;
+        if (number >= 1000000) return `Rp ${(number / 1000000).toFixed(1)}jt`;
+        if (number >= 1000) return `Rp ${(number / 1000).toFixed(0)}rb`;
+        return `Rp ${number}`;
+      }
+
+      function shortChartLabel(value, maxLength = 18) {
+        const label = String(value || "-");
+        return label.length > maxLength
+          ? `${label.slice(0, maxLength - 1)}...`
+          : label;
+      }
+
+      function adminChartOptions(type, options = {}) {
+        const isDoughnut = type === "doughnut";
+        const chartOptions = {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: isDoughnut || options.legend,
+              position: "bottom",
+              labels: {
+                color: adminChartTextColor(),
+                usePointStyle: true,
+                boxWidth: 8,
+                padding: 18,
+                font: {
+                  family: "Plus Jakarta Sans",
+                  weight: 700,
+                },
+              },
+            },
+            tooltip: {
+              callbacks: {
+                label(context) {
+                  const label = context.label ? `${context.label}: ` : "";
+                  const value = context.parsed?.y ?? context.parsed ?? 0;
+                  return `${label}${options.currency ? AdminDashboard.formatRupiah(value) : AdminDashboard.formatNumber(value)}`;
+                },
+              },
+            },
+          },
+        };
+
+        if (!isDoughnut) {
+          chartOptions.scales = {
+            x: {
+              grid: {
+                display: false,
+              },
+              ticks: {
+                color: adminChartTextColor(),
+                font: {
+                  family: "Plus Jakarta Sans",
+                  weight: 700,
+                },
+              },
+            },
+            y: {
+              beginAtZero: true,
+              grid: {
+                color: adminChartGridColor(),
+              },
+              ticks: {
+                color: adminChartTextColor(),
+                precision: 0,
+                callback(value) {
+                  return options.currency ? compactRupiah(value) : value;
+                },
+              },
+            },
+          };
+        }
+
+        return chartOptions;
+      }
+
+      function renderAdminInsights(items) {
+        const body = document.getElementById("admin-chart-insights");
+        if (!body) return;
+
+        body.innerHTML = items
+          .map(
+            (item) => `
+              <div class="flex items-start gap-3">
+                <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${item.iconClass}">
+                  <i data-lucide="${item.icon}" class="h-5 w-5"></i>
+                </div>
+                <div class="min-w-0">
+                  <p class="text-xs font-black uppercase tracking-widest text-slate-400">
+                    ${AdminDashboard.escapeHTML(item.label)}
+                  </p>
+                  <p class="mt-1 text-lg font-black text-slate-900">
+                    ${AdminDashboard.escapeHTML(item.value)}
+                  </p>
+                  <p class="text-xs font-semibold leading-5 text-slate-500">
+                    ${AdminDashboard.escapeHTML(item.detail)}
+                  </p>
+                </div>
+              </div>
+            `,
+          )
+          .join("");
+
+        if (window.lucide) lucide.createIcons();
+      }
+
+      function renderAdminMiniMetrics(items) {
+        const body = document.getElementById("admin-chart-mini-metrics");
+        if (!body) return;
+
+        body.innerHTML = items
+          .map((item) => {
+            const percent = Math.max(Math.min(Number(item.percent) || 0, 100), 4);
+            return `
+              <div class="board-metric-tile">
+                <div class="flex items-start justify-between gap-3">
+                  <div>
+                    <p class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-200/70">
+                      ${AdminDashboard.escapeHTML(item.label)}
+                    </p>
+                    <p class="mt-2 text-2xl font-black text-white">
+                      ${AdminDashboard.escapeHTML(item.value)}
+                    </p>
+                  </div>
+                  <span class="rounded-full px-2 py-1 text-[10px] font-black ${item.badgeClass}">
+                    ${AdminDashboard.escapeHTML(item.badge)}
+                  </span>
+                </div>
+                <div class="board-progress mt-4">
+                  <span style="width: ${percent}%; background: ${item.color}; box-shadow: 0 0 18px ${item.color};"></span>
+                </div>
+              </div>
+            `;
+          })
+          .join("");
+      }
+
+      function setAdminChartActiveState(mode) {
+        document.querySelectorAll("[data-admin-chart-card]").forEach((card) => {
+          card.dataset.active = String(card.dataset.adminChartCard === mode);
+        });
+
+        document.querySelectorAll("[data-admin-chart-tab]").forEach((button) => {
+          const isActive = button.dataset.adminChartTab === mode;
+          button.className = isActive
+            ? "rounded-lg bg-indigo-400/20 px-4 py-2 text-xs font-black text-white ring-1 ring-indigo-300/40 shadow-sm transition-all"
+            : "rounded-lg bg-white/5 px-4 py-2 text-xs font-black text-indigo-200 hover:bg-white/10 hover:text-white transition-all";
+        });
+      }
+
+      function updateAdminChartCopy(mode) {
+        const copy = adminChartCopy[mode] || adminChartCopy.transactions;
+        document.getElementById("admin-chart-title").textContent = copy.title;
+        document.getElementById("admin-chart-subtitle").textContent = copy.subtitle;
+      }
+
+      function updateAdminChartTimestamp() {
+        const updated = document.getElementById("admin-chart-updated");
+        if (!updated) return;
+        updated.textContent = `Diperbarui ${new Date().toLocaleTimeString("id-ID", {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        })}`;
+      }
+
+      function countAdminOrdersByStatus(orders) {
+        return (orders || []).reduce((accumulator, order) => {
+          const status = String(order.status || "unknown").toLowerCase();
+          accumulator[status] = (accumulator[status] || 0) + 1;
+          return accumulator;
+        }, {});
+      }
+
+      function safeDoughnutData(labels, data, colors, emptyLabel) {
+        const total = data.reduce((sum, value) => sum + (Number(value) || 0), 0);
+        if (total > 0) return { labels, data, colors };
+        return {
+          labels: [emptyLabel],
+          data: [1],
+          colors: [adminChartColors.gray],
+        };
+      }
+
+      function adminOrderStatusColor(status) {
+        const normalized = String(status || "").toLowerCase();
+        if (normalized.includes("paid") || normalized.includes("completed")) {
+          return adminChartColors.emerald;
+        }
+        if (normalized.includes("ship")) return adminChartColors.indigo;
+        if (normalized.includes("process")) return adminChartColors.sky;
+        if (normalized.includes("pending")) return adminChartColors.amber;
+        if (normalized.includes("reject") || normalized.includes("cancel")) {
+          return adminChartColors.rose;
+        }
+        return adminChartColors.slate;
+      }
+
+      function createAdminChart(type, labels, data, colors, options = {}) {
+        const canvas = document.getElementById("admin-main-chart");
+        if (!canvas || !window.Chart) {
+          renderAdminInsights([
+            {
+              label: "Grafik",
+              value: "Belum siap",
+              detail: "Library grafik belum tersedia di browser.",
+              icon: "alert-circle",
+              iconClass: "bg-red-50 text-red-600",
+            },
+          ]);
+          return;
+        }
+
+        if (adminMainChart) adminMainChart.destroy();
+
+        adminMainChart = new Chart(canvas, {
+          type,
+          data: {
+            labels,
+            datasets: [
+              {
+                data,
+                backgroundColor: colors,
+                borderColor: type === "line" ? colors[0] : "#ffffff",
+                borderWidth: type === "doughnut" ? 4 : 0,
+                borderRadius: type === "bar" ? 10 : 0,
+                tension: 0.35,
+                fill: type === "line",
+              },
+            ],
+          },
+          options: adminChartOptions(type, options),
+        });
+      }
+
+      function renderAdminChart() {
+        setAdminChartActiveState(adminChartMode);
+        updateAdminChartCopy(adminChartMode);
+
+        if (!adminOverviewData) {
+          renderAdminMiniMetrics([
+            {
+              label: "Status",
+              value: "Memuat",
+              badge: "Live",
+              badgeClass: "bg-indigo-400/15 text-indigo-100",
+              percent: 35,
+              color: adminChartColors.indigo,
+            },
+          ]);
+          renderAdminInsights([
+            {
+              label: "Status Data",
+              value: "Memuat",
+              detail: "Visualisasi akan muncul setelah data admin diterima.",
+              icon: "loader",
+              iconClass: "bg-slate-100 text-slate-500",
+            },
+          ]);
+          return;
+        }
+
+        const recentOrders = adminOverviewData.recent_orders || [];
+
+        if (adminChartMode === "suppliers") {
+          const total = Number(adminOverviewData.total_suppliers) || 0;
+          const pending = Number(adminOverviewData.pending_suppliers) || 0;
+          const verified = Math.max(total - pending, 0);
+          const verifiedRate = total > 0 ? (verified / total) * 100 : 0;
+          const chart = safeDoughnutData(
+            ["Aktif/Terverifikasi", "Menunggu Verifikasi"],
+            [verified, pending],
+            [adminChartColors.emerald, adminChartColors.amber],
+            "Belum ada supplier",
+          );
+
+          renderAdminMiniMetrics([
+            {
+              label: "Verified",
+              value: AdminDashboard.formatNumber(verified),
+              badge: `${Math.round(verifiedRate)}%`,
+              badgeClass: "bg-emerald-400/15 text-emerald-100",
+              percent: verifiedRate,
+              color: adminChartColors.emerald,
+            },
+            {
+              label: "Pending",
+              value: AdminDashboard.formatNumber(pending),
+              badge: "Review",
+              badgeClass: "bg-amber-400/15 text-amber-100",
+              percent: total > 0 ? (pending / total) * 100 : 0,
+              color: adminChartColors.amber,
+            },
+            {
+              label: "Total",
+              value: AdminDashboard.formatNumber(total),
+              badge: "Supplier",
+              badgeClass: "bg-indigo-400/15 text-indigo-100",
+              percent: 100,
+              color: adminChartColors.indigo,
+            },
+          ]);
+          createAdminChart("doughnut", chart.labels, chart.data, chart.colors);
+          renderAdminInsights([
+            {
+              label: "Total Supplier",
+              value: AdminDashboard.formatNumber(total),
+              detail: "Jumlah supplier yang terdaftar di platform.",
+              icon: "users",
+              iconClass: "bg-emerald-50 text-emerald-600",
+            },
+            {
+              label: "Menunggu Verifikasi",
+              value: AdminDashboard.formatNumber(pending),
+              detail: "Supplier yang masih perlu diproses admin.",
+              icon: "shield-question",
+              iconClass: "bg-amber-50 text-amber-600",
+            },
+          ]);
+          return;
+        }
+
+        if (adminChartMode === "orders") {
+          const counts = countAdminOrdersByStatus(recentOrders);
+          const entries = Object.entries(counts);
+          const recentTotal = recentOrders.length;
+          const activeOrders = Number(adminOverviewData.active_orders) || 0;
+          const labels = entries.length
+            ? entries.map(([status]) => AdminDashboard.orderStatusMeta(status)[0])
+            : ["Belum ada pesanan"];
+          const values = entries.length ? entries.map(([, count]) => count) : [1];
+          const colors = entries.length
+            ? entries.map(([status]) => adminOrderStatusColor(status))
+            : [adminChartColors.gray];
+
+          renderAdminMiniMetrics([
+            {
+              label: "Aktif",
+              value: AdminDashboard.formatNumber(activeOrders),
+              badge: "Running",
+              badgeClass: "bg-sky-400/15 text-sky-100",
+              percent: Math.min(activeOrders, 100),
+              color: adminChartColors.sky,
+            },
+            {
+              label: "Sampel",
+              value: AdminDashboard.formatNumber(recentTotal),
+              badge: "Latest",
+              badgeClass: "bg-indigo-400/15 text-indigo-100",
+              percent: Math.min(recentTotal * 20, 100),
+              color: adminChartColors.indigo,
+            },
+            {
+              label: "Status",
+              value: AdminDashboard.formatNumber(entries.length),
+              badge: "Group",
+              badgeClass: "bg-amber-400/15 text-amber-100",
+              percent: Math.min(entries.length * 20, 100),
+              color: adminChartColors.amber,
+            },
+          ]);
+          createAdminChart("doughnut", labels, values, colors);
+          renderAdminInsights([
+            {
+              label: "Pesanan Aktif",
+              value: AdminDashboard.formatNumber(adminOverviewData.active_orders || 0),
+              detail: "Pesanan yang masih berjalan di seluruh supplier.",
+              icon: "package-check",
+              iconClass: "bg-sky-50 text-sky-600",
+            },
+            {
+              label: "Sampel Terbaru",
+              value: AdminDashboard.formatNumber(recentOrders.length),
+              detail: "Status dihitung dari transaksi terbaru di tabel.",
+              icon: "activity",
+              iconClass: "bg-slate-100 text-slate-600",
+            },
+          ]);
+          return;
+        }
+
+        if (adminChartMode === "revenue") {
+          const totalRevenue = Number(adminOverviewData.total_revenue) || 0;
+          const fee = Number(adminOverviewData.system_fee_revenue) || 0;
+          const supplierNet = Math.max(totalRevenue - fee, 0);
+          const feeRate = totalRevenue > 0 ? (fee / totalRevenue) * 100 : 0;
+          const chart = safeDoughnutData(
+            ["Revenue Supplier", "Fee Layanan"],
+            [supplierNet, fee],
+            [adminChartColors.emerald, adminChartColors.indigo],
+            "Belum ada revenue",
+          );
+
+          renderAdminMiniMetrics([
+            {
+              label: "Gross",
+              value: compactRupiah(totalRevenue),
+              badge: "Total",
+              badgeClass: "bg-emerald-400/15 text-emerald-100",
+              percent: 100,
+              color: adminChartColors.emerald,
+            },
+            {
+              label: "Fee",
+              value: compactRupiah(fee),
+              badge: `${feeRate.toFixed(1)}%`,
+              badgeClass: "bg-indigo-400/15 text-indigo-100",
+              percent: feeRate,
+              color: adminChartColors.indigo,
+            },
+            {
+              label: "Supplier",
+              value: compactRupiah(supplierNet),
+              badge: "Net",
+              badgeClass: "bg-teal-400/15 text-teal-100",
+              percent: totalRevenue > 0 ? (supplierNet / totalRevenue) * 100 : 0,
+              color: adminChartColors.teal,
+            },
+          ]);
+          createAdminChart("doughnut", chart.labels, chart.data, chart.colors, {
+            currency: true,
+          });
+          renderAdminInsights([
+            {
+              label: "Total Revenue",
+              value: AdminDashboard.formatRupiah(totalRevenue),
+              detail: "Akumulasi nilai transaksi yang tidak dibatalkan.",
+              icon: "banknote",
+              iconClass: "bg-emerald-50 text-emerald-600",
+            },
+            {
+              label: "Fee Layanan",
+              value: AdminDashboard.formatRupiah(fee),
+              detail: "Estimasi pemasukan platform dari biaya layanan.",
+              icon: "receipt",
+              iconClass: "bg-indigo-50 text-indigo-600",
+            },
+          ]);
+          return;
+        }
+
+        const ordersForChart = recentOrders.slice().reverse();
+        const totalTransactions = Number(adminOverviewData.total_transactions) || 0;
+        const latestValue = ordersForChart[ordersForChart.length - 1]?.grand_total || 0;
+        const largestValue = ordersForChart.reduce(
+          (max, order) => Math.max(max, Number(order.grand_total) || 0),
+          0,
+        );
+        const labels = ordersForChart.length
+          ? ordersForChart.map((order, index) =>
+              shortChartLabel(
+                order.product?.name || `TRX-${String(order.id || index).slice(0, 6)}`,
+                16,
+              ),
+            )
+          : ["Belum ada transaksi"];
+        const values = ordersForChart.length
+          ? ordersForChart.map((order) => Number(order.grand_total) || 0)
+          : [0];
+        const colors = values.map((_, index) =>
+          [
+            adminChartColors.emerald,
+            adminChartColors.sky,
+            adminChartColors.amber,
+            adminChartColors.indigo,
+            adminChartColors.teal,
+            adminChartColors.orange,
+          ][index % 6],
+        );
+
+        renderAdminMiniMetrics([
+          {
+            label: "Total TRX",
+            value: AdminDashboard.formatNumber(totalTransactions),
+            badge: "All",
+            badgeClass: "bg-indigo-400/15 text-indigo-100",
+            percent: Math.min(totalTransactions, 100),
+            color: adminChartColors.indigo,
+          },
+          {
+            label: "Latest",
+            value: compactRupiah(latestValue),
+            badge: "Now",
+            badgeClass: "bg-emerald-400/15 text-emerald-100",
+            percent: largestValue > 0 ? (Number(latestValue) / largestValue) * 100 : 0,
+            color: adminChartColors.emerald,
+          },
+          {
+            label: "Peak",
+            value: compactRupiah(largestValue),
+            badge: "Max",
+            badgeClass: "bg-orange-400/15 text-orange-100",
+            percent: 100,
+            color: adminChartColors.orange,
+          },
+        ]);
+        createAdminChart("bar", labels, values, colors, {
+          currency: true,
+        });
+        renderAdminInsights([
+          {
+            label: "Total Transaksi",
+            value: AdminDashboard.formatNumber(adminOverviewData.total_transactions || 0),
+            detail: "Jumlah transaksi yang tercatat di platform.",
+            icon: "shopping-cart",
+            iconClass: "bg-slate-900 text-white",
+          },
+          {
+            label: "Transaksi Terbaru",
+            value: ordersForChart.length
+              ? AdminDashboard.formatRupiah(ordersForChart[ordersForChart.length - 1]?.grand_total || 0)
+              : AdminDashboard.formatRupiah(0),
+            detail: "Nilai order terbaru yang tampil di grafik.",
+            icon: "trending-up",
+            iconClass: "bg-emerald-50 text-emerald-600",
+          },
+        ]);
+      }
+
+      function selectAdminChart(mode, options = {}) {
+        adminChartMode = adminChartCopy[mode] ? mode : "transactions";
+        renderAdminChart();
+
+        if (options.scroll !== false) {
+          document
+            .getElementById("admin-analytics-panel")
+            ?.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        }
+      }
+
+      function renderRecentOrders(orders) {
+        const tbody = document.getElementById("admin-transactions-body");
+        if (!tbody) return;
+
+        if (!orders || orders.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="3" class="px-8 py-8 text-center text-slate-400 font-semibold">
+                Belum ada transaksi.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        tbody.innerHTML = orders
+          .map((order) => {
+            const invoiceCode = `INV/${new Date(order.created_at).getFullYear()}/${String(order.id).slice(0, 8).toUpperCase()}`;
+            const productName = order.product
+              ? order.product.name
+              : "Transaksi SupplierHub";
+            const [statusLabel, statusClass] = AdminDashboard.orderStatusMeta(order.status);
+
+            return `
+              <tr onclick="openAdminOrder('${AdminDashboard.escapeHTML(order.id)}')" class="hover:bg-slate-50 transition-colors cursor-pointer">
+                <td class="px-8 py-5 flex items-center gap-4">
+                  <div class="w-10 h-10 bg-slate-100 rounded-xl flex justify-center items-center">
+                    <i data-lucide="package" size="18"></i>
+                  </div>
+                  <div>
+                    <span class="text-sm font-bold block">${AdminDashboard.escapeHTML(invoiceCode)}</span>
+                    <span class="text-xs text-slate-400">${AdminDashboard.escapeHTML(productName)}</span>
+                  </div>
+                </td>
+                <td class="px-8 py-5">${AdminDashboard.badge(statusLabel, statusClass)}</td>
+                <td class="px-8 py-5 text-right font-black">${AdminDashboard.formatRupiah(order.grand_total)}</td>
+              </tr>
+            `;
+          })
+          .join("");
+        if (window.lucide) lucide.createIcons();
+      }
+
+      async function fetchAdminStats() {
+        const data = await AdminDashboard.apiFetch("/api/admin/stats");
+        adminOverviewData = data;
+
+        document.getElementById("admin-total-suppliers").innerText =
+          AdminDashboard.formatNumber(data.total_suppliers ?? 0);
+        document.getElementById("admin-total-transactions").innerText =
+          AdminDashboard.formatNumber(data.total_transactions ?? 0);
+        document.getElementById("admin-active-orders").innerText =
+          AdminDashboard.formatNumber(data.active_orders ?? 0);
+        document.getElementById("admin-revenue-growth").innerText =
+          data.revenue_growth || "0%";
+        renderRecentOrders(data.recent_orders || []);
+        renderAdminChart();
+        updateAdminChartTimestamp();
+      }
+
+      async function fetchAdminLogs() {
+        const body = document.getElementById("admin-logs-body");
+        if (!body) return;
+
+        try {
+          const res = await AdminDashboard.apiFetch("/api/admin/logs");
+          const logs = res.data || [];
+
+          if (logs.length === 0) {
+            body.innerHTML = `
+              <div class="rounded-2xl border border-slate-100 bg-slate-50 p-5 text-center">
+                <p class="text-sm font-bold text-slate-600">Belum ada aktivitas tercatat.</p>
+              </div>
+            `;
+            return;
+          }
+
+          body.innerHTML = logs
+            .map((log) => {
+              const date = new Date(log.created_at).toLocaleString("id-ID", {
+                hour: "2-digit",
+                minute: "2-digit",
+                day: "numeric",
+                month: "short",
+              });
+              let iconBg = "bg-slate-100 text-slate-500";
+              let icon = "activity";
+
+              const action = String(log.action).toUpperCase();
+              if (action.includes("VERIFY") || action.includes("ACTIVE")) {
+                iconBg = "bg-emerald-50 text-emerald-600";
+                icon = "shield-check";
+              } else if (action.includes("STOCK") || action.includes("UPDATE")) {
+                iconBg = "bg-blue-50 text-blue-600";
+                icon = "package";
+              } else if (action.includes("DELETE") || action.includes("SUSPEND")) {
+                iconBg = "bg-red-50 text-red-600";
+                icon = "alert-circle";
+              } else if (action.includes("LOGIN") || action.includes("REGISTER")) {
+                iconBg = "bg-orange-50 text-orange-600";
+                icon = "user-plus";
+              }
+
+              return `
+                <div class="flex gap-3 items-start border-b border-slate-50 pb-3 last:border-0 last:pb-0">
+                  <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${iconBg}">
+                    <i data-lucide="${icon}" class="h-4 w-4"></i>
+                  </div>
+                  <div class="min-w-0 flex-1">
+                    <p class="text-xs font-black text-slate-900 uppercase tracking-wider">${AdminDashboard.escapeHTML(log.action)}</p>
+                    <p class="mt-0.5 text-xs text-slate-600 leading-relaxed">${AdminDashboard.escapeHTML(log.description)}</p>
+                    <p class="mt-1 text-[10px] text-slate-400 font-bold">${date}</p>
+                  </div>
+                </div>
+              `;
+            })
+            .join("");
+
+          if (window.lucide) lucide.createIcons();
+        } catch (error) {
+          console.error("Gagal memuat logs", error);
+          body.innerHTML = `
+            <div class="rounded-2xl border border-red-50 bg-red-50 p-5 text-center">
+              <p class="text-sm font-bold text-red-600">Gagal memuat aktivitas.</p>
+            </div>
+          `;
+        }
+      }
+
+      function renderAdminStatsError(message) {
+        const tbody = document.getElementById("admin-transactions-body");
+        if (tbody) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="3" class="px-8 py-8 text-center text-red-500 font-semibold">
+                ${AdminDashboard.escapeHTML(message)}
+              </td>
+            </tr>
+          `;
+        }
+      }
+
+      async function refreshAdminRealtime(options = {}) {
+        const [statsResult, logsResult] = await Promise.allSettled([
+          fetchAdminStats(),
+          fetchAdminLogs(),
+        ]);
+
+        if (statsResult.status === "rejected") {
+          console.error("Gagal memuat dashboard admin stats", statsResult.reason);
+          renderAdminStatsError(statsResult.reason.message);
+          if (!options.silent) {
+            AdminDashboard.notify("danger", statsResult.reason.message);
+          }
+        }
+
+        if (logsResult.status === "rejected") {
+          console.error("Gagal memuat dashboard admin logs", logsResult.reason);
+          if (!options.silent) {
+            AdminDashboard.notify("warning", "Log aktivitas belum bisa dimuat.");
+          }
+        }
+      }
+
+      function setupAdminSearch() {
+        const input = document.getElementById("admin-global-search");
+        if (!input) return;
+
+        input.addEventListener("keydown", (event) => {
+          if (event.key !== "Enter") return;
+          const query = input.value.trim();
+          window.location.href = query
+            ? `admin_daftar_supplier.html?q=${encodeURIComponent(query)}`
+            : "admin_daftar_supplier.html";
+        });
+      }
+
+      function openAdminOrder(orderID) {
+        if (!orderID) return;
+        window.location.href = `admin_keuangan.html?q=${encodeURIComponent(orderID)}`;
+      }
+
+      function exportAdminOverview() {
+        if (!adminOverviewData) {
+          AdminDashboard.notify("warning", "Data overview belum siap diekspor.");
+          return;
+        }
+
+        AdminDashboard.downloadCSV(
+          "laporan-overview-admin.csv",
+          ["Metrik", "Nilai"],
+          [
+            ["Total Supplier", adminOverviewData.total_suppliers || 0],
+            ["Total Transaksi", adminOverviewData.total_transactions || 0],
+            ["Pesanan Aktif", adminOverviewData.active_orders || 0],
+            ["Total Revenue", adminOverviewData.total_revenue || 0],
+            ["Fee Layanan", adminOverviewData.system_fee_revenue || 0],
+          ],
+        );
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        AdminDashboard.initPage({
+          onReady: async () => {
+            setupAdminSearch();
+            selectAdminChart("transactions", { scroll: false });
+            await refreshAdminRealtime();
+            if (adminRealtimeTimer) clearInterval(adminRealtimeTimer);
+            adminRealtimeTimer = setInterval(
+              () => refreshAdminRealtime({ silent: true }),
+              30000,
+            );
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

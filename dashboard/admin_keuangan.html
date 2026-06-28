@@ -1,0 +1,511 @@
+﻿<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="../assets/img/logo.png" type="image/x-icon" />
+    <title>Supplier Hub - Admin Dashboard</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwindcss.config = {
+        darkMode: 'class'
+      }
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/admin_common.js"></script>
+    <script src="../assets/js/darkmode.js"></script>
+    <script src="../assets/js/pagination.js"></script>
+    <link rel="stylesheet" href="../assets/css/darkmode.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f8fafc;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 20px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #cbd5e1;
+      }
+
+      :root.dark .custom-scrollbar::-webkit-scrollbar-track {
+        background: #1f2937;
+      }
+
+      :root.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #4b5563;
+      }
+
+      :root.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #6b7280;
+      }
+
+      :root.dark body {
+        background-color: #111827;
+        color: #f3f4f6;
+      }
+
+      :root.dark #app-content {
+        background-color: #111827;
+      }
+
+      :root.dark header {
+        background-color: #1f2937;
+        border-bottom-color: #374151;
+      }
+
+      :root.dark .bg-white {
+        background-color: #1f2937;
+      }
+
+      :root.dark .bg-slate-50 {
+        background-color: #374151;
+      }
+
+      :root.dark .text-slate-900 {
+        color: #f3f4f6;
+      }
+
+      :root.dark .text-slate-600 {
+        color: #d1d5db;
+      }
+
+      :root.dark .text-slate-500 {
+        color: #9ca3af;
+      }
+
+      :root.dark .border-slate-200 {
+        border-color: #374151;
+      }
+
+      :root.dark .border-slate-100 {
+        border-color: #374151;
+      }
+
+      :root.dark input {
+        background-color: #374151;
+        color: #f3f4f6;
+      }
+
+      :root.dark input::placeholder {
+        color: #9ca3af;
+      }
+
+      :root.dark #sidebar {
+        background-color: #1f2937;
+        border-right-color: #374151;
+      }
+
+      :root.dark .bg-slate-900 {
+        background-color: #1f2937;
+      }
+
+      :root.dark .bg-slate-800 {
+        background-color: #374151;
+      }
+
+      :root.dark .hover\:bg-slate-800:hover {
+        background-color: #2d3748;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-slate-50 text-slate-900 selection:bg-emerald-100 selection:text-emerald-900 overflow-hidden"
+  >
+    <div id="app-content" class="min-h-screen flex invisible">
+      <!-- Sidebar - Admin Theme (Navy) -->
+      <aside
+        id="sidebar"
+        class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-all duration-300 transform lg:relative lg:translate-x-0 border-r border-slate-800 flex flex-col"
+      >
+        <div class="p-8 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center">
+              <img
+                src="../assets/img/logo.png"
+                alt="Logo SupplierHub"
+                class="w-12 h-12 object-contain"
+              />
+            </div>
+            <span class="text-xl font-bold tracking-tight"
+              >SUPPLIER<span class="text-emerald-400">HUB</span></span
+            >
+          </div>
+          <button onclick="toggleSidebar()" class="lg:hidden text-slate-400">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <nav
+          class="mt-4 px-6 space-y-1.5 flex-1 overflow-y-auto custom-scrollbar"
+        >
+          <p
+            class="px-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4"
+          >
+            ADMIN MENU
+          </p>
+          <a
+            href="admin.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i
+              data-lucide="layout-dashboard"
+              class="group-hover:text-emerald-400"
+            ></i>
+            <span class="font-semibold text-sm">Overview</span>
+          </a>
+          <a
+            href="admin_daftar_supplier.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i data-lucide="users" class="group-hover:text-emerald-400"></i>
+            <span class="font-semibold text-sm">Daftar Supplier</span>
+          </a>
+          <a
+            href="admin_kontrol_stok.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i data-lucide="package" class="group-hover:text-emerald-400"></i>
+            <span class="font-semibold text-sm">Kontrol Stok</span>
+          </a>
+          <a
+            href="admin_keuangan.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group bg-emerald-600 text-white shadow-xl shadow-emerald-900/40"
+          >
+            <i data-lucide="bar-chart-3" class="text-white"></i>
+            <span class="font-semibold text-sm">Keuangan</span>
+          </a>
+          <a
+            href="admin_pengaturan.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i data-lucide="settings" class="group-hover:text-emerald-400"></i>
+            <span class="font-semibold text-sm">Pengaturan</span>
+          </a>
+        </nav>
+
+        <div class="px-6 pb-8">
+          <button
+            onclick="logoutUser('../Login/login.html')"
+            class="w-full flex items-center justify-between px-4 py-3 text-slate-400 hover:text-red-400 transition-colors group"
+          >
+            <div class="flex items-center gap-3">
+              <i data-lucide="log-out" size="20"></i>
+              <span class="font-semibold text-sm">Keluar Sistem</span>
+            </div>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <header
+          class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-40"
+        >
+          <div class="flex items-center gap-4">
+            <button
+              onclick="toggleSidebar()"
+              class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg"
+            >
+              <i data-lucide="menu"></i>
+            </button>
+            <div>
+              <h1 class="text-xl font-bold text-slate-900 tracking-tight">
+                Keuangan
+              </h1>
+              <p class="text-xs text-slate-500 hidden md:block">
+                Selamat datang, Superadmin. Monitor aktivitas platform.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-6">
+            <div
+              class="hidden md:flex items-center bg-slate-50 rounded-xl px-4 py-2.5 w-72 border border-slate-200 focus-within:border-emerald-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-emerald-500/5 transition-all"
+            >
+              <i data-lucide="search" class="text-slate-400 w-4 h-4"></i>
+              <input
+                id="finance-search"
+                type="text"
+                placeholder="Cari Data..."
+                class="bg-transparent border-none focus:ring-0 text-sm w-full ml-2 outline-none placeholder:text-slate-400 text-slate-700"
+              />
+            </div>
+            <button 
+              onclick="DarkModeToggle.toggle()"
+              class="theme-toggle-btn"
+              title="Toggle Dark Mode"
+            >
+              <i class="fas fa-moon"></i>
+            </button>
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-3 pl-2">
+                <div class="text-right hidden sm:block">
+                  <p
+                    id="user-display-name"
+                    class="text-sm font-bold text-slate-900 leading-none"
+                  >
+                    Admin
+                  </p>
+                  <p
+                    class="text-[10px] text-emerald-600 font-black uppercase tracking-widest mt-1.5"
+                  >
+                    Role: ADMIN
+                  </p>
+                </div>
+                <div
+                  class="w-11 h-11 rounded-xl bg-emerald-50 border-2 border-white shadow-sm overflow-hidden ring-1 ring-slate-200 flex py-1 justify-center"
+                >
+                  <i
+                    data-lucide="shield-check"
+                    class="text-emerald-600 w-7 h-7 mt-1.5"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+          <div
+            class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8"
+          >
+            <div>
+              <h2 class="text-2xl font-black text-slate-900 tracking-tight">
+                Laporan Keuangan
+              </h2>
+              <p class="text-slate-500 text-sm">
+                Ringkasan pendapatan dan transaksi platform.
+              </p>
+            </div>
+            <button
+              onclick="exportFinanceReport()"
+              class="flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl text-sm font-bold hover:bg-slate-800 transition-all"
+            >
+              <i data-lucide="download" class="w-4 h-4"></i> Unduh Laporan
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div
+              class="bg-emerald-600 text-white p-6 rounded-3xl shadow-lg shadow-emerald-600/20"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <div class="p-3 bg-white/20 rounded-xl">
+                  <i data-lucide="dollar-sign"></i>
+                </div>
+              </div>
+              <p
+                class="text-xs font-bold text-emerald-100 uppercase tracking-widest"
+              >
+                Total Pendapatan
+              </p>
+              <p id="finance-total-revenue" class="text-3xl font-black mt-2">-</p>
+            </div>
+            <div
+              class="bg-white border border-slate-100 p-6 rounded-3xl shadow-sm"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                  <i data-lucide="credit-card"></i>
+                </div>
+              </div>
+              <p
+                class="text-xs font-bold text-slate-400 uppercase tracking-widest"
+              >
+                Transaksi Berhasil
+              </p>
+              <p id="finance-success-count" class="text-3xl font-black text-slate-900 mt-2">-</p>
+            </div>
+            <div
+              class="bg-white border border-slate-100 p-6 rounded-3xl shadow-sm"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <div class="p-3 bg-orange-50 text-orange-600 rounded-xl">
+                  <i data-lucide="clock"></i>
+                </div>
+              </div>
+              <p
+                class="text-xs font-bold text-slate-400 uppercase tracking-widest"
+              >
+                Menunggu Pembayaran
+              </p>
+              <p id="finance-pending-value" class="text-3xl font-black text-slate-900 mt-2">-</p>
+            </div>
+          </div>
+
+          <div
+            class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden"
+          >
+            <div class="p-8 border-b border-slate-50">
+              <h3 class="font-black text-slate-900 text-lg tracking-tight">
+                Riwayat Transaksi Terbaru
+              </h3>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead>
+                  <tr
+                    class="bg-slate-50/50 text-slate-400 text-[10px] uppercase tracking-[0.2em] font-black border-b border-slate-100"
+                  >
+                    <th class="px-8 py-5">ID Transaksi</th>
+                    <th class="px-8 py-5">Tanggal</th>
+                    <th class="px-8 py-5">Nominal</th>
+                    <th class="px-8 py-5 text-center">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="finance-table-body" class="divide-y divide-slate-50">
+                  <tr>
+                    <td colspan="4" class="px-8 py-8 text-center text-slate-400 font-semibold">
+                      Memuat transaksi...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div id="finance-pagination" class="px-8 pb-6"></div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      let financeRows = [];
+      let financeSummary = null;
+      const financePagination = SupplierHubPagination.create({
+        pageSize: 10,
+        itemLabel: "transaksi",
+      });
+
+      function renderFinanceTable(rows, options = {}) {
+        const tbody = document.getElementById("finance-table-body");
+        if (!tbody) return;
+        const rowList = Array.isArray(rows) ? rows : [];
+        if (!options.preservePage) SupplierHubPagination.reset(financePagination);
+        const pageData = SupplierHubPagination.getPage(rowList, financePagination);
+
+        if (rowList.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="4" class="px-8 py-8 text-center text-slate-400 font-semibold">
+                Belum ada transaksi keuangan.
+              </td>
+            </tr>
+          `;
+          SupplierHubPagination.render("finance-pagination", financePagination, [], {
+            itemLabel: "transaksi",
+          });
+          return;
+        }
+
+        tbody.innerHTML = pageData.items
+          .map((order) => {
+            const [statusLabel, statusClass] = AdminDashboard.orderStatusMeta(order.status);
+            return `
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="px-8 py-5">
+                  <span class="font-bold text-sm text-slate-900 block">${AdminDashboard.shortID("TRX", order.id)}</span>
+                  <span class="text-xs text-slate-400">${AdminDashboard.escapeHTML(order.product?.name || "Transaksi SupplierHub")}</span>
+                </td>
+                <td class="px-8 py-5 text-sm text-slate-500">
+                  ${AdminDashboard.formatDate(order.updated_at || order.created_at)}
+                </td>
+                <td class="px-8 py-5 font-black text-slate-900">
+                  ${AdminDashboard.formatRupiah(order.grand_total)}
+                </td>
+                <td class="px-8 py-5 text-center">
+                  ${AdminDashboard.badge(statusLabel, statusClass)}
+                </td>
+              </tr>
+            `;
+          })
+          .join("");
+        SupplierHubPagination.render("finance-pagination", financePagination, rowList, {
+          itemLabel: "transaksi",
+          onPageChange: () => renderFinanceTable(rowList, { preservePage: true }),
+        });
+      }
+
+      function applyFinanceSearch() {
+        const query = (document.getElementById("finance-search")?.value || "")
+          .trim()
+          .toLowerCase();
+        const rows = financeRows.filter((order) =>
+          [
+            order.id,
+            order.status,
+            order.product?.name,
+            order.supplier?.business_name,
+            order.umkm?.business_name,
+          ].some((value) => String(value || "").toLowerCase().includes(query)),
+        );
+        renderFinanceTable(rows);
+      }
+
+      async function loadFinanceSummary() {
+        financeSummary = await AdminDashboard.apiFetch("/api/admin/finance");
+        financeRows = financeSummary.latest_orders || [];
+
+        document.getElementById("finance-total-revenue").textContent =
+          AdminDashboard.formatRupiah(financeSummary.gross_order_value || 0);
+        document.getElementById("finance-success-count").textContent =
+          AdminDashboard.formatNumber(financeSummary.success_payments || financeSummary.transaction_count || 0);
+        document.getElementById("finance-pending-value").textContent =
+          AdminDashboard.formatRupiah(financeSummary.pending_payment_value || 0);
+        applyFinanceSearch();
+      }
+
+      function exportFinanceReport() {
+        if (!financeSummary) {
+          AdminDashboard.notify("warning", "Data keuangan belum siap diekspor.");
+          return;
+        }
+
+        AdminDashboard.downloadCSV(
+          "laporan-keuangan-supplierhub.csv",
+          ["ID", "Produk", "Supplier", "UMKM", "Total", "Fee", "Status", "Tanggal"],
+          financeRows.map((order) => [
+            order.id,
+            order.product?.name || "",
+            order.supplier?.business_name || "",
+            order.umkm?.business_name || "",
+            order.grand_total || 0,
+            order.system_fee || 0,
+            order.status || "",
+            order.updated_at || order.created_at || "",
+          ]),
+        );
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        AdminDashboard.initPage({
+          onReady: async () => {
+            const search = document.getElementById("finance-search");
+            const initialQuery = new URLSearchParams(window.location.search).get("q") || "";
+            if (search) {
+              search.value = initialQuery;
+              search.addEventListener("input", applyFinanceSearch);
+            }
+            await loadFinanceSummary().catch((err) => {
+              console.error("Gagal memuat keuangan admin", err);
+              AdminDashboard.notify("danger", err.message);
+              renderFinanceTable([]);
+            });
+          },
+        });
+      });
+    </script>
+  </body>
+</html>
