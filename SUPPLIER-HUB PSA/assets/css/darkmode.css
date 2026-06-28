@@ -1,0 +1,667 @@
+/* Dark Mode Styles */
+
+/* Toast Notification Animations */
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-out {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-1rem);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out forwards;
+}
+
+.animate-slide-out {
+  animation: slide-out 0.3s ease-out forwards;
+}
+
+/* Moon Icon Animation */
+.theme-toggle-btn {
+  position: relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #f3f4f6;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  color: #374151;
+}
+
+.theme-toggle-btn:hover {
+  background-color: #e5e7eb;
+  transform: scale(1.05);
+}
+
+.theme-toggle-btn i {
+  font-size: 24px;
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.theme-toggle-btn:hover i {
+  transform: rotate(20deg);
+}
+
+/* Dark mode theme toggle button */
+:root.dark .theme-toggle-btn {
+  background-color: #334155; /* Menggunakan Slate-700 biar lebih soft */
+  color: #f59e0b;            /* Amber-500, warna gold yang lebih hangat & kontras pas */
+}
+
+:root.dark .theme-toggle-btn:hover {
+  background-color: #475569; /* Slate-600 */
+}
+
+/* Smooth transitions for dark mode */
+:root.dark {
+  color-scheme: dark;
+}
+
+:root.dark * {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Tailwind overrides for dark mode (Optimized for Soft Contrast) */
+:root.dark {
+  /* Background colors - Menggunakan basis Slate/Zinc soft dark */
+  --color-bg-primary: #1e293b;   /* Slate-800: tidak terlalu hitam, nyaman di mata */
+  --color-bg-secondary: #0f172a; /* Slate-900: untuk depth/card background */
+  --color-bg-tertiary: #334155;  /* Slate-700: untuk komponen yang butuh pop-up */
+  
+  /* Text colors - Menghindari warna putih pekat (#fff) untuk mengurangi eye strain */
+  --color-text-primary: #f1f5f9;   /* Slate-100: putih lembut (off-white) */
+  --color-text-secondary: #94a3b8; /* Slate-400: abu-abu dengan keterbacaan yang pas */
+  
+  /* Border colors for dark mode */
+  --color-border: #334155;       /* Slate-700: border tipis yang tidak mencolok */
+}
+
+/* Glass effect in dark mode */
+:root.dark .glass-effect {
+  /* Menggunakan background primary soft dengan opacity pas */
+  background: rgba(30, 41, 59, 0.75);
+  backdrop-filter: blur(8px); /* Menambahkan efek blur standar glassmorphism */
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Scrollbar dark mode */
+:root.dark .custom-scrollbar::-webkit-scrollbar-track {
+  background: #0f172a; /* Mengikuti warna bg-secondary */
+}
+
+:root.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #334155; /* Mengikuti warna border/tertiary */
+  border-radius: 4px;
+}
+
+:root.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #475569; /* Slate-600 */
+}
+
+/* Shared dark-mode polish for dashboards and generated content */
+:root.dark {
+  --color-bg-primary: #1e293b;
+  --color-bg-secondary: #0f172a;
+  --color-bg-tertiary: #243041;
+  --color-text-primary: #e5e7eb;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-border: #334155;
+}
+
+:root.dark body,
+:root.dark #app-content,
+:root.dark main {
+  background-color: var(--color-bg-secondary) !important;
+  color: var(--color-text-primary) !important;
+}
+
+:root.dark header,
+:root.dark nav.glass-effect,
+:root.dark .glass-effect {
+  background: rgba(15, 23, 42, 0.88) !important;
+  border-color: var(--color-border) !important;
+}
+
+:root.dark #sidebar,
+:root.dark .bg-slate-900 {
+  background-color: #0b1220 !important;
+}
+
+:root.dark .bg-slate-800,
+:root.dark .hover\:bg-slate-800:hover {
+  background-color: #1e293b !important;
+}
+
+:root.dark .bg-white,
+:root.dark .bg-gray-50,
+:root.dark .bg-gray-100,
+:root.dark .bg-gray-200,
+:root.dark .bg-slate-50,
+:root.dark .bg-slate-100,
+:root.dark .bg-slate-200,
+:root.dark .bg-slate-300,
+:root.dark .bg-slate-50\/30,
+:root.dark .bg-slate-50\/50,
+:root.dark .bg-white\/80,
+:root.dark .bg-white\/90,
+:root.dark .card-hover {
+  background-color: var(--color-bg-primary) !important;
+}
+
+:root.dark .hover\:bg-white:hover,
+:root.dark .hover\:bg-slate-50:hover,
+:root.dark .hover\:bg-slate-100:hover,
+:root.dark .hover\:bg-slate-200:hover,
+:root.dark .hover\:bg-gray-50:hover,
+:root.dark .hover\:bg-gray-200:hover,
+:root.dark .focus-within\:bg-white:focus-within {
+  background-color: var(--color-bg-tertiary) !important;
+}
+
+:root.dark .hover\:bg-emerald-50:hover,
+:root.dark .hover\:bg-emerald-100:hover,
+:root.dark .hover\:bg-green-100:hover {
+  background-color: rgba(16, 185, 129, 0.22) !important;
+}
+
+:root.dark .hover\:bg-orange-100:hover,
+:root.dark .hover\:bg-amber-100:hover {
+  background-color: rgba(245, 158, 11, 0.22) !important;
+}
+
+:root.dark .hover\:bg-red-50:hover,
+:root.dark .hover\:bg-red-100:hover,
+:root.dark .hover\:bg-rose-100:hover {
+  background-color: rgba(244, 63, 94, 0.22) !important;
+}
+
+:root.dark .hover\:bg-blue-50:hover,
+:root.dark .hover\:bg-blue-100:hover {
+  background-color: rgba(56, 189, 248, 0.18) !important;
+}
+
+:root.dark .text-slate-900,
+:root.dark .text-slate-800,
+:root.dark .text-gray-900,
+:root.dark .text-gray-800 {
+  color: var(--color-text-primary) !important;
+}
+
+:root.dark .text-slate-700,
+:root.dark .text-slate-600,
+:root.dark .text-gray-700,
+:root.dark .text-gray-600 {
+  color: var(--color-text-secondary) !important;
+}
+
+:root.dark .text-slate-500,
+:root.dark .text-slate-400,
+:root.dark .text-slate-300,
+:root.dark .text-gray-500,
+:root.dark .text-gray-400,
+:root.dark .text-gray-300 {
+  color: var(--color-text-muted) !important;
+}
+
+:root.dark .border-slate-50,
+:root.dark .border-slate-100,
+:root.dark .border-slate-200,
+:root.dark .border-slate-800,
+:root.dark .border-gray-100,
+:root.dark .border-gray-200,
+:root.dark .border-gray-300,
+:root.dark .border-green-100,
+:root.dark .border-emerald-100,
+:root.dark .border-orange-100,
+:root.dark .border-red-100 {
+  border-color: var(--color-border) !important;
+}
+
+:root.dark .divide-slate-50 > :not([hidden]) ~ :not([hidden]),
+:root.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]),
+:root.dark tbody.divide-y > :not([hidden]) ~ :not([hidden]) {
+  border-color: var(--color-border) !important;
+}
+
+:root.dark input,
+:root.dark select,
+:root.dark textarea {
+  background-color: var(--color-bg-primary) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+:root.dark input::placeholder,
+:root.dark textarea::placeholder {
+  color: var(--color-text-muted) !important;
+}
+
+:root.dark table,
+:root.dark tbody,
+:root.dark tbody tr {
+  background-color: transparent !important;
+  color: var(--color-text-secondary) !important;
+}
+
+:root.dark thead,
+:root.dark thead tr {
+  background-color: #111827 !important;
+  color: var(--color-text-muted) !important;
+}
+
+:root.dark tbody tr:hover {
+  background-color: var(--color-bg-tertiary) !important;
+}
+
+:root.dark th,
+:root.dark td {
+  border-color: var(--color-border) !important;
+}
+
+:root.dark .bg-emerald-50,
+:root.dark .bg-green-50,
+:root.dark .bg-green-50\/50 {
+  background-color: rgba(16, 185, 129, 0.16) !important;
+}
+
+:root.dark .bg-orange-50,
+:root.dark .bg-orange-50\/50,
+:root.dark .bg-amber-50,
+:root.dark .bg-yellow-50 {
+  background-color: rgba(245, 158, 11, 0.16) !important;
+}
+
+:root.dark .bg-red-50,
+:root.dark .bg-rose-50 {
+  background-color: rgba(244, 63, 94, 0.16) !important;
+}
+
+:root.dark .bg-blue-50,
+:root.dark .bg-sky-50,
+:root.dark .bg-indigo-50,
+:root.dark .bg-teal-50 {
+  background-color: rgba(56, 189, 248, 0.14) !important;
+}
+
+:root.dark .text-emerald-600,
+:root.dark .text-emerald-700,
+:root.dark .text-green-600,
+:root.dark .text-green-brand {
+  color: #34d399 !important;
+}
+
+:root.dark .text-orange-600,
+:root.dark .text-amber-600,
+:root.dark .text-yellow-600 {
+  color: #fbbf24 !important;
+}
+
+:root.dark .text-red-500,
+:root.dark .text-red-600,
+:root.dark .text-rose-600 {
+  color: #fb7185 !important;
+}
+
+:root.dark .text-blue-600,
+:root.dark .text-sky-600,
+:root.dark .text-indigo-600,
+:root.dark .text-teal-600 {
+  color: #60a5fa !important;
+}
+
+:root.dark .ring-white {
+  --tw-ring-color: #334155 !important;
+}
+
+:root.dark #toast,
+:root.dark #toast-container > div,
+:root.dark #admin-notification-panel > div,
+:root.dark #supplier-notification-panel > div {
+  background-color: rgba(30, 41, 59, 0.96) !important;
+  border-color: var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+  box-shadow: 0 24px 48px rgba(2, 6, 23, 0.38) !important;
+}
+
+:root.dark .swal2-popup {
+  background: var(--color-bg-primary) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+:root.dark .swal2-title {
+  color: var(--color-text-primary) !important;
+}
+
+:root.dark .swal2-html-container {
+  color: var(--color-text-secondary) !important;
+}
+
+:root.dark .category-chip.active {
+  background-color: #16a34a !important;
+  border-color: #16a34a !important;
+  color: #ffffff !important;
+}
+
+/* TABLE DARK MODE STYLING */
+:root.dark table thead {
+  background-color: #111827;
+  color: #94a3b8;
+}
+
+:root.dark table thead tr {
+  background-color: #111827;
+  border-bottom-color: #334155;
+}
+
+:root.dark table thead th {
+  color: #cbd5e1;
+  border-bottom-color: #334155;
+  font-weight: 900;
+}
+
+:root.dark table tbody {
+  border-color: #334155;
+}
+
+:root.dark table tbody td {
+  color: #e5e7eb;
+  border-bottom-color: #334155;
+}
+
+:root.dark table tbody tr {
+  border-bottom-color: #334155;
+}
+
+:root.dark table tbody tr:hover {
+  background-color: #243041;
+}
+
+/* Improve contrast for table section backgrounds */
+:root.dark .bg-slate-50\/50 {
+  background-color: #1e293b !important;
+}
+
+/* NOTIFICATION TOAST STYLING */
+:root.dark #admin-notification-panel,
+:root.dark #supplier-notification-panel {
+  /* Toast container */
+}
+
+:root.dark #admin-notification-panel .notification-toast,
+:root.dark #supplier-notification-panel .notification-toast {
+  background-color: #1f2937;
+  border-color: #334155;
+  color: #f1f5f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+:root.dark #admin-notification-panel .notification-toast:hover,
+:root.dark #supplier-notification-panel .notification-toast:hover {
+  background-color: #374151;
+  border-color: #475569;
+}
+
+:root.dark #admin-notification-panel p.text-slate-900,
+:root.dark #supplier-notification-panel p.text-slate-900 {
+  color: #f1f5f9 !important;
+}
+
+:root.dark #admin-notification-panel p.text-slate-500,
+:root.dark #supplier-notification-panel p.text-slate-500 {
+  color: #9ca3af !important;
+}
+
+:root.dark #admin-notification-panel .bg-emerald-50,
+:root.dark #supplier-notification-panel .bg-emerald-50 {
+  background-color: #065f46 !important;
+}
+
+:root.dark #admin-notification-panel .bg-orange-50,
+:root.dark #supplier-notification-panel .bg-orange-50 {
+  background-color: #7c2d12 !important;
+}
+
+:root.dark #admin-notification-panel .text-emerald-600,
+:root.dark #supplier-notification-panel .text-emerald-600 {
+  color: #86efac !important;
+}
+
+:root.dark #admin-notification-panel .text-orange-600,
+:root.dark #supplier-notification-panel .text-orange-600 {
+  color: #fed7aa !important;
+}
+
+:root.dark #admin-notification-panel button[data-action="close"],
+:root.dark #supplier-notification-panel button[data-action="close"] {
+  color: #9ca3af;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+:root.dark #admin-notification-panel button[data-action="close"]:hover,
+:root.dark #supplier-notification-panel button[data-action="close"]:hover {
+  color: #f1f5f9;
+}
+
+/* ==========================================================================
+   Soft Light Mode Styling Override (Reducing Eye Strain & Glare)
+   ========================================================================== */
+
+/* Apply softer background to the entire page body in light mode */
+:root:not(.dark) body,
+:root:not(.dark) #app-content,
+:root:not(.dark) main {
+  background-color: #f1f5f9 !important; /* Soft Slate-100 */
+}
+
+:root:not(.dark) body {
+  color: #334155;            /* Soft Slate-700 text default */
+}
+
+/* Style the analytics board to be light-themed in light mode */
+:root:not(.dark) .analytics-board {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  box-shadow: 0 10px 30px rgba(148, 163, 184, 0.08) !important;
+  color: #334155 !important;
+}
+
+:root:not(.dark) .analytics-board .board-header {
+  border-color: #e2e8f0 !important;
+  background: #f8fafc !important;
+}
+
+:root:not(.dark) .analytics-board .chart-frame,
+:root:not(.dark) .analytics-board .board-tile {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: none !important;
+}
+
+:root:not(.dark) .board-metric-tile {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02) !important;
+}
+
+:root:not(.dark) .analytics-board .text-slate-900,
+:root:not(.dark) .analytics-board .text-slate-800,
+:root:not(.dark) .analytics-board .text-slate-700,
+:root:not(.dark) .analytics-board h3,
+:root:not(.dark) .analytics-board .text-white,
+:root:not(.dark) .analytics-board p.text-white,
+:root:not(.dark) .analytics-board span.text-white {
+  color: #1e293b !important;
+}
+
+:root:not(.dark) .analytics-board .text-slate-600,
+:root:not(.dark) .analytics-board .text-slate-500,
+:root:not(.dark) .analytics-board .text-slate-400,
+:root:not(.dark) .analytics-board p.text-slate-400,
+:root:not(.dark) .analytics-board p.text-slate-500 {
+  color: #64748b !important;
+}
+
+:root:not(.dark) .analytics-board .text-indigo-200,
+:root:not(.dark) .analytics-board .text-indigo-200\/70,
+:root:not(.dark) .analytics-board p.text-indigo-200\/70 {
+  color: #475569 !important;
+}
+
+
+/* Tone down stark white background panels to soft slate-50 */
+:root:not(.dark) .bg-white {
+  background-color: #f8fafc !important; /* Slate-50 */
+}
+
+/* Ensure active category chips remain green with white text in light mode */
+:root:not(.dark) .category-chip.active {
+  background-color: #16a34a !important;
+  border-color: #16a34a !important;
+  color: #ffffff !important;
+}
+
+/* Tone down slate-50 / gray-50 backgrounds to soft slate-100 (escaped slashes) */
+:root:not(.dark) .bg-slate-50,
+:root:not(.dark) .bg-gray-50,
+:root:not(.dark) .bg-slate-100\/30,
+:root:not(.dark) .bg-slate-100\/60 {
+  background-color: #f1f5f9 !important;
+}
+
+/* Ensure supplier card pills in light mode are soft slate with dark readable text */
+:root:not(.dark) .supplier-card .bg-slate-50 {
+  background-color: #f1f5f9 !important;
+  color: #475569 !important;
+}
+
+/* Ensure supplier card badges in light mode have soft pastel backgrounds and high-contrast text */
+:root:not(.dark) .supplier-card .bg-amber-100 {
+  background-color: rgba(245, 158, 11, 0.1) !important;
+  color: #b45309 !important;
+}
+
+:root:not(.dark) .supplier-card .bg-blue-100 {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+  color: #1d4ed8 !important;
+}
+
+:root:not(.dark) .supplier-card .bg-green-100 {
+  background-color: rgba(16, 185, 129, 0.1) !important;
+  color: #047857 !important;
+}
+
+/* Soften light green/emerald tint backgrounds */
+:root:not(.dark) .bg-green-50,
+:root:not(.dark) .bg-green-50\/50,
+:root:not(.dark) .bg-emerald-50 {
+  background-color: rgba(16, 185, 129, 0.08) !important;
+}
+
+/* Soften light blue tint backgrounds */
+:root:not(.dark) .bg-blue-50,
+:root:not(.dark) .bg-blue-50\/50 {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+}
+
+/* Soften light yellow/amber tint backgrounds */
+:root:not(.dark) .bg-amber-50,
+:root:not(.dark) .bg-yellow-50 {
+  background-color: rgba(245, 158, 11, 0.08) !important;
+}
+
+/* Soften light red/rose tint backgrounds */
+:root:not(.dark) .bg-rose-50,
+:root:not(.dark) .bg-red-50 {
+  background-color: rgba(244, 63, 94, 0.08) !important;
+}
+
+/* Soften navigation bar and glassmorphism panel translucency in light mode */
+:root:not(.dark) nav.glass-effect,
+:root:not(.dark) .glass-effect {
+  background: rgba(248, 250, 252, 0.85) !important; /* Soft slate translucent */
+  border-color: rgba(226, 232, 240, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+}
+
+/* Ensure inputs, selects, and textareas stand out with clean white bg & soft borders */
+:root:not(.dark) input,
+:root:not(.dark) select,
+:root:not(.dark) textarea {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important; /* Soft slate border */
+  color: #334155 !important;
+}
+
+/* Allow actual standalone card elements, chatbot, and popups to remain white for pop-out hierarchy */
+:root:not(.dark) .supplier-card,
+:root:not(.dark) .card-hover,
+:root:not(.dark) .swal2-popup,
+:root:not(.dark) [id^="view-"] > div,
+:root:not(.dark) #chatbot-panel,
+:root:not(.dark) #chatbot-panel .bg-white,
+:root:not(.dark) #chatbot-messages .bg-white,
+:root:not(.dark) #chatbot-input {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+
+/* Soften text color overrides for better readability in light mode */
+:root:not(.dark) .text-slate-900,
+:root:not(.dark) .text-gray-900 {
+  color: #1e293b !important; /* Deep Slate instead of solid black */
+}
+
+:root:not(.dark) .text-slate-600,
+:root:not(.dark) .text-gray-600 {
+  color: #475569 !important; /* Slate-600 */
+}
+
+:root:not(.dark) .text-slate-500,
+:root:not(.dark) .text-gray-500 {
+  color: #64748b !important; /* Slate-500 */
+}
+
+:root:not(.dark) .border-slate-100,
+:root:not(.dark) .border-slate-200,
+:root:not(.dark) .border-gray-100,
+:root:not(.dark) .border-gray-200 {
+  border-color: #e2e8f0 !important;
+}
+
+/* Global Sidebar Height & Scroll Layout Fix */
+#sidebar {
+  height: 100vh !important;
+  max-height: 100vh !important;
+  overflow: hidden !important;
+}
+
+/* Fix annoying white shadow/glow in dark mode */
+:root.dark .shadow-slate-200 {
+  box-shadow: none !important;
+}
+
+

@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="../assets/img/logo.png" type="image/x-icon" />
+    <title>Supplier Hub - Supplier Portal</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwindcss.config = {
+        darkMode: 'class'
+      }
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/supplier_common.js"></script>
+    <script src="../assets/js/darkmode.js"></script>
+    <link rel="stylesheet" href="../assets/css/darkmode.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f8fafc;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 20px;
+      }
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #cbd5e1;
+      }
+
+      :root.dark .custom-scrollbar::-webkit-scrollbar-track {
+        background: #1f2937;
+      }
+
+      :root.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #4b5563;
+      }
+
+      :root.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #6b7280;
+      }
+
+      :root.dark body {
+        background-color: #111827;
+        color: #f3f4f6;
+      }
+
+      :root.dark #app-content {
+        background-color: #111827;
+      }
+
+      :root.dark header {
+        background-color: #1f2937;
+        border-bottom-color: #374151;
+      }
+
+      :root.dark .bg-white {
+        background-color: #1f2937;
+      }
+
+      :root.dark .bg-slate-50 {
+        background-color: #374151;
+      }
+
+      :root.dark .text-slate-900 {
+        color: #f3f4f6;
+      }
+
+      :root.dark .text-slate-600 {
+        color: #d1d5db;
+      }
+
+      :root.dark .text-slate-500 {
+        color: #9ca3af;
+      }
+
+      :root.dark .border-slate-200 {
+        border-color: #374151;
+      }
+
+      :root.dark .border-slate-100 {
+        border-color: #374151;
+      }
+
+      :root.dark input {
+        background-color: #374151;
+        color: #f3f4f6;
+      }
+
+      :root.dark input::placeholder {
+        color: #9ca3af;
+      }
+
+      :root.dark #sidebar {
+        background-color: #1f2937;
+        border-right-color: #374151;
+      }
+
+      :root.dark .bg-slate-900 {
+        background-color: #1f2937;
+      }
+
+      :root.dark .bg-slate-800 {
+        background-color: #374151;
+      }
+
+      :root.dark .hover\:bg-slate-800:hover {
+        background-color: #2d3748;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-slate-50 text-slate-900 selection:bg-emerald-100 selection:text-emerald-900 overflow-hidden"
+  >
+    <div id="app-content" class="min-h-screen flex invisible">
+      <!-- Sidebar - Supplier Theme (Greenish Navy) -->
+      <aside
+        id="sidebar"
+        class="fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transition-all duration-300 transform lg:relative lg:translate-x-0 border-r border-slate-800 flex flex-col"
+      >
+        <div class="p-8 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center">
+              <img
+                src="../assets/img/logo.png"
+                alt="Logo SupplierHub"
+                class="w-12 h-12 object-contain"
+              />
+            </div>
+            <span class="text-xl font-bold tracking-tight"
+              >SUPPLIER<span class="text-emerald-400">HUB</span></span
+            >
+          </div>
+          <button onclick="toggleSidebar()" class="lg:hidden text-slate-400">
+            <i data-lucide="x"></i>
+          </button>
+        </div>
+
+        <nav
+          class="mt-4 px-6 space-y-1.5 flex-1 overflow-y-auto custom-scrollbar"
+        >
+          <p
+            class="px-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] mb-4"
+          >
+            SUPPLIER MENU
+          </p>
+          <a
+            href="supplier.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i
+              data-lucide="layout-dashboard"
+              class="group-hover:text-emerald-400"
+            ></i>
+            <span class="font-semibold text-sm">Dashboard</span>
+          </a>
+          <a
+            href="supplier_produk_saya.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i data-lucide="package" class="group-hover:text-emerald-400"></i>
+            <span class="font-semibold text-sm">Produk Saya</span>
+          </a>
+          <a
+            href="supplier_daftar_pesanan.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i
+              data-lucide="shopping-cart"
+              class="group-hover:text-emerald-400"
+            ></i>
+            <span class="font-semibold text-sm">Daftar Pesanan</span>
+          </a>
+          <a
+            href="supplier_notifikasi.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i data-lucide="bell-ring" class="group-hover:text-emerald-400"></i>
+            <span class="font-semibold text-sm">Notifikasi</span>
+          </a>
+          <a
+            href="supplier_analitik.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group text-slate-400 hover:bg-slate-800 hover:text-white"
+          >
+            <i
+              data-lucide="bar-chart-3"
+              class="group-hover:text-emerald-400"
+            ></i>
+            <span class="font-semibold text-sm">Analitik Toko</span>
+          </a>
+          <a
+            href="supplier_toko.html"
+            class="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-200 group bg-emerald-600 text-white shadow-xl shadow-emerald-900/40"
+          >
+            <i data-lucide="settings" class="text-white"></i>
+            <span class="font-semibold text-sm">Toko Saya</span>
+          </a>
+        </nav>
+
+        <div class="px-6 pb-8">
+          <button
+            onclick="logoutUser('../Login/login.html')"
+            class="w-full flex items-center justify-between px-4 py-3 text-slate-400 hover:text-red-400 transition-colors group"
+          >
+            <div class="flex items-center gap-3">
+              <i data-lucide="log-out" size="20"></i>
+              <span class="font-semibold text-sm">Keluar Sistem</span>
+            </div>
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="flex-1 flex flex-col h-screen overflow-hidden">
+        <header
+          class="h-20 bg-white border-b border-slate-200 flex items-center justify-between px-8 sticky top-0 z-40"
+        >
+          <div class="flex items-center gap-4">
+            <button
+              onclick="toggleSidebar()"
+              class="lg:hidden p-2 text-slate-600 hover:bg-slate-100 rounded-lg"
+            >
+              <i data-lucide="menu"></i>
+            </button>
+            <div>
+              <h1 class="text-xl font-bold text-slate-900 tracking-tight">
+                Toko Saya
+              </h1>
+              <p class="text-xs text-slate-500 hidden md:block">
+                Portal Mitra Supplier
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-6">
+            <div
+              class="hidden md:flex items-center bg-slate-50 rounded-xl px-4 py-2.5 w-72 border border-slate-200 focus-within:border-emerald-500 focus-within:bg-white focus-within:ring-4 focus-within:ring-emerald-500/5 transition-all"
+            >
+              <i data-lucide="search" class="text-slate-400 w-4 h-4"></i>
+              <input
+                type="text"
+                placeholder="Cari Menu..."
+                class="bg-transparent border-none focus:ring-0 text-sm w-full ml-2 outline-none placeholder:text-slate-400 text-slate-700"
+              />
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-3 pl-2">
+                <div class="text-right hidden sm:block">
+                  <p
+                    id="user-display-name"
+                    class="text-sm font-bold text-slate-900 leading-none"
+                  >
+                    Supplier
+                  </p>
+                  <p
+                    class="text-[10px] text-emerald-600 font-black uppercase tracking-widest mt-1.5"
+                  >
+                    Role: SUPPLIER
+                  </p>
+                </div>
+                <div
+                  class="w-11 h-11 rounded-xl bg-emerald-50 border-2 border-white shadow-sm overflow-hidden ring-1 ring-slate-200 flex py-1 justify-center"
+                >
+                  <i
+                    data-lucide="store"
+                    class="text-emerald-600 w-7 h-7 mt-1.5"
+                  ></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+          <div
+            class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8"
+          >
+            <div>
+              <h2 class="text-2xl font-black text-slate-900 tracking-tight">
+                Toko Saya <span class="text-emerald-600 font-extrabold" data-supplier-name-display>Supplier</span>
+              </h2>
+              <p class="text-slate-500 text-sm">
+                Kelola profil dan informasi toko Anda.
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-1">
+              <div class="bg-white rounded-[2.5rem] p-8 shadow-sm border border-slate-100 flex flex-col items-center text-center">
+                <div class="w-32 h-32 rounded-full bg-emerald-50 text-emerald-700 mb-6 flex items-center justify-center border-4 border-white shadow-lg ring-1 ring-slate-100">
+                  <span id="store-initials" class="text-4xl font-black">SH</span>
+                </div>
+                <h3 id="store-card-name" class="text-xl font-bold text-slate-900">Memuat toko...</h3>
+                <p id="store-card-status" class="text-sm text-slate-500 mt-1">Status akun</p>
+                <div class="w-full mt-6 space-y-3 text-left border-t border-slate-100 pt-6">
+                  <div class="flex items-center gap-3 text-sm text-slate-600">
+                    <i data-lucide="map-pin" class="w-4 h-4 text-emerald-600"></i>
+                    <span id="store-card-region">-</span>
+                  </div>
+                  <div class="flex items-center gap-3 text-sm text-slate-600">
+                    <i data-lucide="tag" class="w-4 h-4 text-orange-400"></i>
+                    <span id="store-card-category">-</span>
+                  </div>
+                  <div class="flex items-center gap-3 text-sm text-slate-600">
+                    <i data-lucide="clock" class="w-4 h-4 text-blue-600"></i>
+                    <span id="store-card-joined">-</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="lg:col-span-2">
+              <div class="bg-white rounded-[2.5rem] shadow-sm border border-slate-100 overflow-hidden p-8">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 mb-6">
+                  <div>
+                    <h3 class="text-lg font-black text-slate-900">
+                      Informasi Dasar Toko
+                    </h3>
+                    <p class="text-sm text-slate-500 mt-1">
+                      Data ini mengikuti akun supplier yang sedang login.
+                    </p>
+                  </div>
+                  <a
+                    id="store-document-link"
+                    href="#"
+                    target="_blank"
+                    class="hidden text-sm font-bold text-emerald-700 hover:text-emerald-800"
+                  >
+                    Lihat Dokumen Legalitas
+                  </a>
+                </div>
+
+                <form id="storeProfileForm" class="space-y-6">
+                  <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Nama Toko / Perusahaan</label>
+                    <input
+                      id="store-name-input"
+                      type="text"
+                      required
+                      disabled
+                      class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 cursor-not-allowed focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all"
+                      placeholder="Nama toko supplier"
+                    />
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label class="block text-sm font-bold text-slate-700 mb-2">Email Akun</label>
+                      <input
+                        id="store-email-input"
+                        type="email"
+                        readonly
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-500"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-bold text-slate-700 mb-2">Status Verifikasi</label>
+                      <input
+                        id="store-status-input"
+                        type="text"
+                        readonly
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-500"
+                      />
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label class="block text-sm font-bold text-slate-700 mb-2">Role</label>
+                      <input
+                        id="store-role-input"
+                        type="text"
+                        readonly
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-500"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-bold text-slate-700 mb-2">Tanggal Bergabung</label>
+                      <input
+                        id="store-joined-input"
+                        type="text"
+                        readonly
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-500"
+                      />
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label class="block text-sm font-bold text-slate-700 mb-2">Kategori Supply</label>
+                      <input
+                        id="store-category-input"
+                        type="text"
+                        disabled
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 cursor-not-allowed focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all"
+                        placeholder="Contoh: Bahan Pokok"
+                      />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-bold text-slate-700 mb-2">Wilayah Supply</label>
+                      <input
+                        id="store-region-input"
+                        type="text"
+                        disabled
+                        class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 cursor-not-allowed focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all"
+                        placeholder="Contoh: Bandung"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Alamat Lengkap</label>
+                    <textarea
+                      id="store-address-input"
+                      rows="3"
+                      disabled
+                      class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50 text-slate-500 cursor-not-allowed focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 outline-none transition-all resize-none"
+                      placeholder="Alamat operasional toko"
+                    ></textarea>
+                  </div>
+
+                  <div class="pt-4 flex justify-end">
+                    <button
+                      id="store-save-button"
+                      type="submit"
+                      class="px-6 py-3 bg-emerald-600 text-white rounded-xl font-bold hover:bg-emerald-700 shadow-lg shadow-emerald-600/20 transition-all disabled:opacity-60"
+                    >
+                      Edit
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script>
+      let currentSupplierProfile = null;
+      let isStoreEditMode = false;
+      const editableStoreFields = [
+        "store-name-input",
+        "store-category-input",
+        "store-region-input",
+        "store-address-input",
+      ];
+
+      function getInitials(name) {
+        const words = String(name || "Supplier Hub")
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean);
+        return words
+          .slice(0, 2)
+          .map((word) => word.charAt(0).toUpperCase())
+          .join("");
+      }
+
+      function getStatusLabel(status) {
+        const normalized = String(status || "").toLowerCase();
+        const labels = {
+          active: "Terverifikasi",
+          pending: "Menunggu Verifikasi",
+          suspended: "Ditangguhkan",
+        };
+        return labels[normalized] || status || "-";
+      }
+
+      function formatJoinedDate(value) {
+        if (!value) return "-";
+        return new Date(value).toLocaleDateString("id-ID", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
+      }
+
+      function getDocumentURL(path) {
+        if (!path) return "";
+        if (/^https?:\/\//i.test(path)) return path;
+        return buildApiUrl(path.startsWith("/") ? path : `/${path}`);
+      }
+
+      function renderSupplierProfile(profile) {
+        currentSupplierProfile = profile;
+
+        document.getElementById("store-initials").textContent = getInitials(profile.business_name);
+        document.getElementById("store-card-name").textContent =
+          profile.business_name || "Supplier";
+        document.getElementById("store-card-status").textContent = getStatusLabel(profile.status);
+        document.getElementById("store-card-region").textContent = profile.region || "-";
+        document.getElementById("store-card-category").textContent = profile.category || "-";
+        document.getElementById("store-card-joined").textContent =
+          `Bergabung ${formatJoinedDate(profile.created_at)}`;
+
+        document.getElementById("store-name-input").value = profile.business_name || "";
+        document.getElementById("store-email-input").value = profile.email || "";
+        document.getElementById("store-status-input").value = getStatusLabel(profile.status);
+        document.getElementById("store-role-input").value = profile.role || "supplier";
+        document.getElementById("store-joined-input").value = formatJoinedDate(profile.created_at);
+        document.getElementById("store-category-input").value = profile.category || "";
+        document.getElementById("store-region-input").value = profile.region || "";
+        document.getElementById("store-address-input").value = profile.address || "";
+
+        const documentLink = document.getElementById("store-document-link");
+        const documentURL = getDocumentURL(profile.document_url);
+        documentLink.classList.toggle("hidden", !documentURL);
+        if (documentURL) documentLink.href = documentURL;
+
+        SupplierDashboard.setUserDisplay({
+          ...profile,
+          name: profile.business_name,
+        });
+        setStoreEditMode(false);
+        lucide.createIcons();
+      }
+
+      function setStoreEditMode(enabled) {
+        isStoreEditMode = enabled;
+        editableStoreFields.forEach((fieldID) => {
+          const field = document.getElementById(fieldID);
+          if (!field) return;
+          field.disabled = !enabled;
+          field.classList.toggle("bg-slate-50", !enabled);
+          field.classList.toggle("text-slate-500", !enabled);
+          field.classList.toggle("cursor-not-allowed", !enabled);
+        });
+
+        const saveButton = document.getElementById("store-save-button");
+        saveButton.textContent = enabled ? "Simpan" : "Edit";
+      }
+
+      function validateStorePayload(payload) {
+        if (
+          !payload.business_name ||
+          !payload.category ||
+          !payload.region ||
+          !payload.address
+        ) {
+          SupplierDashboard.notify(
+            "warning",
+            "Nama toko, kategori, wilayah, dan alamat wajib diisi.",
+          );
+          return false;
+        }
+        return true;
+      }
+
+      async function fetchSupplierProfile() {
+        try {
+          const profile = await SupplierDashboard.getProfile();
+          renderSupplierProfile(profile);
+        } catch (error) {
+          SupplierDashboard.notify("danger", error.message || "Gagal memuat profil supplier.");
+        }
+      }
+
+      async function saveSupplierProfile(event) {
+        event.preventDefault();
+
+        if (!isStoreEditMode) {
+          setStoreEditMode(true);
+          document.getElementById("store-name-input").focus();
+          return;
+        }
+
+        const saveButton = document.getElementById("store-save-button");
+        saveButton.disabled = true;
+        saveButton.textContent = "Menyimpan...";
+
+        const payload = {
+          business_name: document.getElementById("store-name-input").value.trim(),
+          category: document.getElementById("store-category-input").value.trim(),
+          region: document.getElementById("store-region-input").value.trim(),
+          address: document.getElementById("store-address-input").value.trim(),
+        };
+
+        if (!validateStorePayload(payload)) {
+          saveButton.disabled = false;
+          saveButton.textContent = "Simpan";
+          return;
+        }
+
+        try {
+          const profile = await SupplierDashboard.updateProfile(payload);
+          SupplierDashboard.updateStoredProfile(profile);
+          renderSupplierProfile(profile);
+          SupplierDashboard.notify("success", "Profil toko berhasil diperbarui.");
+          await fetchSupplierProfile();
+        } catch (error) {
+          SupplierDashboard.notify("danger", error.message || "Gagal menyimpan profil toko.");
+        } finally {
+          saveButton.disabled = false;
+          saveButton.textContent = isStoreEditMode ? "Simpan" : "Edit";
+        }
+      }
+
+      function setupStoreForm() {
+        const form = document.getElementById("storeProfileForm");
+        form.addEventListener("submit", saveSupplierProfile);
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        SupplierDashboard.initPage({
+          onReady: async () => {
+            setupStoreForm();
+            setStoreEditMode(false);
+            await fetchSupplierProfile();
+          },
+        });
+      });
+    </script>
+  </body>
+</html>

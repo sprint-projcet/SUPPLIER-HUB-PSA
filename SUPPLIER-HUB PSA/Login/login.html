@@ -1,0 +1,862 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Supplier-Hub | Autentikasi & Akses</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwindcss.config = {
+        darkMode: 'class'
+      }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/darkmode.js"></script>
+    <link rel="stylesheet" href="../assets/css/darkmode.css">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap");
+
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .active-role {
+        border-color: #02c39a;
+        background-color: rgba(2, 195, 154, 0.1);
+        color: #02c39a;
+      }
+
+      :root.dark body {
+        background-color: #111827;
+        color: #f3f4f6;
+      }
+
+      :root.dark .bg-white {
+        background-color: #1f2937;
+      }
+
+      :root.dark .bg-gray-50 {
+        background-color: #111827;
+      }
+
+      :root.dark .text-gray-800 {
+        color: #f3f4f6;
+      }
+
+      :root.dark .text-gray-900 {
+        color: #f3f4f6;
+      }
+
+      :root.dark .text-gray-500 {
+        color: #9ca3af;
+      }
+
+      :root.dark .text-gray-700 {
+        color: #d1d5db;
+      }
+
+      :root.dark .border-gray-100 {
+        border-color: #374151;
+      }
+
+      :root.dark .border-gray-300 {
+        border-color: #4b5563;
+      }
+
+      :root.dark input {
+        background-color: #374151;
+        color: #f3f4f6;
+      }
+
+      :root.dark select {
+        background-color: #374151;
+        color: #f3f4f6;
+      }
+
+      :root.dark textarea {
+        background-color: #374151;
+        color: #f3f4f6;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-50 text-gray-800">
+    <!-- Theme Toggle Button -->
+    <div class="fixed top-4 right-4 z-50">
+      <button 
+        onclick="DarkModeToggle.toggle()"
+        class="theme-toggle-btn"
+        title="Toggle Dark Mode"
+      >
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+
+    <!-- Konten Utama (Tanpa Navbar) -->
+    <main
+      class="max-w-6xl mx-auto p-4 flex justify-center items-center min-h-screen py-12"
+    >
+      <!-- View: LOGIN -->
+      <section
+        id="view-login"
+        class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
+      >
+        <div class="p-8">
+          <!-- Logo Branding di dalam Form -->
+          <div class="flex justify-center mb-6">
+            <div class="flex items-center gap-2">
+              <div
+                class="w-10 h-10 rounded-xl flex items-center justify-center"
+              >
+                <img
+                  src="../assets/img/logo.png"
+                  alt="Logo SupplierHub"
+                  class="w-12 h-12 object-contain"
+                />
+              </div>
+              <h1 class="text-2xl font-bold text-gray-900 tracking-tight">
+                Supplier<span class="text-[#02C39A]">-Hub</span>
+              </h1>
+            </div>
+          </div>
+
+          <div class="text-center mb-8">
+            <h2 class="text-xl font-bold text-gray-900">
+              Selamat Datang Kembali
+            </h2>
+            <p class="text-gray-500 text-sm mt-2">
+              Masuk untuk mengakses Supplier-Hub
+            </p>
+          </div>
+
+          <div
+            id="login-error"
+            class="hidden mb-6 p-3 bg-red-50 text-red-600 rounded-lg flex items-start gap-2 text-sm border border-red-100"
+          >
+            <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
+            <span id="login-error-msg"></span>
+          </div>
+
+          <form id="login-form" class="space-y-5">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Email</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="mail"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
+                ></i>
+                <input
+                  type="email"
+                  id="login-email"
+                  required
+                  class="pl-10 w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-[#02C39A] outline-none transition-all"
+                  placeholder="email@perusahaan.com"
+                />
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Kata Sandi</label
+              >
+              <div class="relative">
+                <i
+                  data-lucide="lock"
+                  class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
+                ></i>
+                <input
+                  type="password"
+                  id="login-pass"
+                  required
+                  class="pl-10 w-full rounded-lg border border-gray-300 px-4 py-2.5 focus:ring-2 focus:ring-[#02C39A] outline-none transition-all"
+                  placeholder="••••••••"
+                />
+              </div>
+            </div>
+            <!-- card kotak 3 role  -->
+            <!-- <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Masuk Sebagai</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button type="button" onclick="setLoginRole('UMKM')" id="btn-role-umkm"
+                                class="role-btn active-role flex flex-col items-center justify-center py-3 px-2 rounded-lg border text-sm font-medium transition-all">
+                                <i data-lucide="building-2" class="w-5 h-5 mb-1"></i> UMKM
+                            </button>
+                            <button type="button" onclick="setLoginRole('Supplier')" id="btn-role-supplier"
+                                class="role-btn border-gray-200 text-gray-500 flex flex-col items-center justify-center py-3 px-2 rounded-lg border text-sm font-medium transition-all hover:bg-gray-50">
+                                <i data-lucide="truck" class="w-5 h-5 mb-1"></i> Supplier
+                            </button>
+                            <button type="button" onclick="setLoginRole('Admin')" id="btn-role-admin"
+                                class="role-btn border-gray-200 text-gray-500 flex flex-col items-center justify-center py-3 px-2 rounded-lg border text-sm font-medium transition-all hover:bg-gray-50">
+                                <i data-lucide="shield-check" class="w-5 h-5 mb-1"></i> Admin
+                            </button>
+                        </div>
+                    </div> -->
+
+            <button
+              type="submit"
+              id="login-submit"
+              class="w-full py-3 px-4 bg-[#02C39A] hover:bg-[#02a885] text-white rounded-lg font-semibold shadow-md transition-all active:scale-[0.98]"
+            >
+              Masuk (Login)
+            </button>
+
+            <div class="relative flex items-center my-4">
+              <div class="flex-grow border-t border-gray-200"></div>
+              <span
+                class="flex-shrink-0 mx-4 text-gray-400 text-xs font-semibold"
+                >ATAU</span
+              >
+              <div class="flex-grow border-t border-gray-200"></div>
+            </div>
+
+            <button
+              type="button"
+              onclick="loginWithGoogle()"
+              class="w-full py-3 px-4 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 rounded-lg font-semibold shadow-sm transition-all active:scale-[0.98] flex items-center justify-center gap-3"
+            >
+              <svg
+                class="w-5 h-5"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  fill="#4285F4"
+                />
+                <path
+                  d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  fill="#34A853"
+                />
+                <path
+                  d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                  fill="#FBBC05"
+                />
+                <path
+                  d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                  fill="#EA4335"
+                />
+                <path d="M1 1h22v22H1z" fill="none" />
+              </svg>
+              Masuk dengan Google
+            </button>
+          </form>
+
+          <div class="mt-8 text-center border-t border-gray-100 pt-6">
+            <p class="text-sm text-gray-600 mb-3">
+              Belum punya akun? Daftar sebagai:
+            </p>
+            <div class="flex justify-center gap-4">
+              <button
+                onclick="showView('reg-umkm')"
+                class="text-[#02C39A] hover:underline font-semibold text-sm"
+              >
+                UMKM
+              </button>
+              <span class="text-gray-300">|</span>
+              <button
+                onclick="showView('reg-supplier')"
+                class="text-[#02C39A] hover:underline font-semibold text-sm"
+              >
+                Supplier
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- View: REGISTER UMKM -->
+      <section
+        id="view-reg-umkm"
+        class="hidden w-full max-w-lg bg-white rounded-2xl shadow-xl border border-gray-100 p-8"
+      >
+        <div class="mb-6 flex items-center gap-3">
+          <div class="p-2 bg-[#02C39A]/10 rounded-lg">
+            <i data-lucide="building-2" class="text-[#02C39A] w-6 h-6"></i>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900">Daftar UMKM Baru</h2>
+            <p class="text-gray-500 text-sm">
+              Temukan supplier bahan baku terbaik
+            </p>
+          </div>
+        </div>
+        <div
+          id="reg-umkm-error"
+          class="hidden mb-6 p-3 bg-red-50 text-red-600 rounded-lg flex items-start gap-2 text-sm border border-red-100"
+        >
+          <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
+          <span id="reg-umkm-error-msg"></span>
+        </div>
+        <form id="form-reg-umkm" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium text-gray-700 mb-1"
+                >Nama Usaha *</label
+              >
+              <input
+                type="text"
+                required
+                class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#02C39A] outline-none"
+                placeholder="Contoh: Kedai Kopi ABC"
+              />
+            </div>
+            <input
+              type="email"
+              required
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#02C39A] outline-none"
+              placeholder="Email Usaha *"
+            />
+            <input
+              type="password"
+              required
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#02C39A] outline-none"
+              placeholder="Kata Sandi *"
+            />
+            <div class="md:col-span-2">
+              <textarea
+                required
+                rows="2"
+                class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#02C39A] outline-none"
+                placeholder="Alamat Lengkap Usaha *"
+              ></textarea>
+            </div>
+            <div class="md:col-span-2 relative">
+              <i
+                data-lucide="file-text"
+                class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
+              ></i>
+              <input
+                type="text"
+                class="pl-10 w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#02C39A] outline-none"
+                placeholder="NIB / SIUP (Opsional)"
+              />
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="w-full py-3 px-4 bg-[#02C39A] hover:bg-[#02a885] text-white rounded-lg font-semibold transition-all"
+          >
+            Daftar Sekarang
+          </button>
+          <button
+            type="button"
+            onclick="showView('login')"
+            class="w-full text-sm text-gray-500 hover:underline"
+          >
+            Kembali ke Login
+          </button>
+        </form>
+      </section>
+
+      <!-- View: REGISTER SUPPLIER -->
+      <section
+        id="view-reg-supplier"
+        class="hidden w-full max-w-xl bg-white rounded-2xl shadow-xl border border-gray-100 p-8"
+      >
+        <div class="mb-6 flex items-center gap-3">
+          <div class="p-2 bg-[#02C39A]/10 rounded-lg">
+            <i data-lucide="truck" class="text-[#02C39A] w-6 h-6"></i>
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900">
+              Daftar Mitra Supplier
+            </h2>
+            <p class="text-gray-500 text-sm">
+              Kelola supply chain Anda bersama kami
+            </p>
+          </div>
+        </div>
+        <div
+          id="reg-supplier-error"
+          class="hidden mb-6 p-3 bg-red-50 text-red-600 rounded-lg flex items-start gap-2 text-sm border border-red-100"
+        >
+          <i data-lucide="alert-circle" class="w-5 h-5 shrink-0"></i>
+          <span id="reg-supplier-error-msg"></span>
+        </div>
+        <form id="form-reg-supplier" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="md:col-span-2">
+              <input
+                type="text"
+                required
+                class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#02C39A] outline-none"
+                placeholder="Nama Perusahaan *"
+              />
+            </div>
+            <input
+              type="email"
+              required
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#02C39A] outline-none"
+              placeholder="Email Perusahaan *"
+            />
+            <input
+              type="password"
+              required
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#02C39A] outline-none"
+              placeholder="Kata Sandi *"
+            />
+            <select
+              required
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#02C39A] outline-none bg-white"
+            >
+              <option value="">Kategori Bahan *</option>
+              <option>Bahan Baku Makanan</option>
+              <option>Kemasan</option>
+              <option>Alat Dapur</option>
+            </select>
+            <input
+              type="text"
+              required
+              class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:ring-2 focus:ring-[#02C39A] outline-none"
+              placeholder="Wilayah Supply *"
+            />
+            <div
+              class="md:col-span-2 border-2 border-dashed border-gray-200 rounded-lg p-6 text-center hover:border-[#02C39A] transition-colors bg-gray-50"
+            >
+              <i
+                data-lucide="upload"
+                class="mx-auto h-8 w-8 text-gray-400 mb-2"
+              ></i>
+              <label class="cursor-pointer text-[#02C39A] font-medium">
+                <span>Klik untuk upload dokumen legalitas</span>
+                <input
+                  type="file"
+                  class="sr-only"
+                  required
+                  id="file-supplier"
+                />
+              </label>
+              <p id="file-name" class="text-xs text-gray-500 mt-1">
+                SIUP/Akta (PDF/ZIP max 10MB)
+              </p>
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="w-full py-3 px-4 bg-[#02C39A] hover:bg-[#02a885] text-white rounded-lg font-semibold transition-all"
+          >
+            Kirim Dokumen & Daftar
+          </button>
+          <button
+            type="button"
+            onclick="showView('login')"
+            class="w-full text-sm text-gray-500 hover:underline"
+          >
+            Kembali ke Login
+          </button>
+        </form>
+      </section>
+
+      <!-- View: SUCCESS REG -->
+      <section
+        id="view-success"
+        class="hidden w-full max-w-md bg-white rounded-2xl shadow-xl p-8 text-center border border-gray-100"
+      >
+        <div
+          id="success-icon"
+          class="w-16 h-16 bg-[#02C39A]/10 text-[#02C39A] rounded-full flex items-center justify-center mx-auto mb-4"
+        >
+          <i data-lucide="check-circle-2" class="w-8 h-8"></i>
+        </div>
+        <h2 id="success-title" class="text-2xl font-bold text-gray-900 mb-2">
+          Berhasil!
+        </h2>
+        <p id="success-desc" class="text-gray-600 mb-6 text-sm"></p>
+        <button
+          onclick="showView('login')"
+          class="w-full py-3 px-4 bg-[#02C39A] text-white rounded-lg font-semibold"
+        >
+          Kembali ke Login
+        </button>
+      </section>
+
+      <!-- View: DASHBOARD (Setelah Login) -->
+      <section
+        id="view-dashboard"
+        class="hidden w-full max-w-4xl bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative"
+      >
+        <!-- Header Logout di dalam Dashboard -->
+        <div class="absolute top-4 right-4 z-10">
+          <button
+            onclick="logout()"
+            class="flex items-center gap-2 text-sm bg-white/20 hover:bg-white/40 text-white px-3 py-1.5 rounded-lg transition-colors"
+          >
+            <i data-lucide="log-out" class="w-4 h-4"></i> Keluar
+          </button>
+        </div>
+
+        <div
+          class="h-32 bg-gradient-to-r from-[#02C39A] to-[#019b7a] flex items-end px-8 pb-6"
+        >
+          <h2 id="dash-title" class="text-3xl font-bold text-white">
+            Dashboard
+          </h2>
+        </div>
+        <div class="p-8">
+          <div
+            class="flex items-center gap-4 mb-8 p-4 bg-green-50 rounded-lg border border-green-100"
+          >
+            <i data-lucide="shield-check" class="w-8 h-8 text-[#02C39A]"></i>
+            <div>
+              <h3 class="font-semibold text-gray-900">
+                Sesi Terautentikasi (JWT)
+              </h3>
+              <p id="dash-status" class="text-sm text-gray-600"></p>
+            </div>
+          </div>
+          <div id="dash-cards" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      let currentRole = "UMKM";
+      let views = ["login", "reg-umkm", "reg-supplier", "success", "dashboard"];
+      const POST_LOGIN_REDIRECT_KEY = "postLoginRedirect";
+      const REGISTER_VIEW_PARAM = "register";
+
+      function initIcons() {
+        lucide.createIcons();
+      }
+
+      function showView(viewId) {
+        views.forEach((v) => {
+          document.getElementById(`view-${v}`).classList.add("hidden");
+        });
+
+        // Sembunyikan error message lama saat pindah form
+        if (document.getElementById("reg-umkm-error"))
+          document.getElementById("reg-umkm-error").classList.add("hidden");
+        if (document.getElementById("reg-supplier-error"))
+          document.getElementById("reg-supplier-error").classList.add("hidden");
+        if (document.getElementById("login-error"))
+          document.getElementById("login-error").classList.add("hidden");
+
+        document.getElementById(`view-${viewId}`).classList.remove("hidden");
+        initIcons();
+      }
+
+      function setLoginRole(role) {
+        currentRole = role;
+        document.querySelectorAll(".role-btn").forEach((btn) => {
+          btn.classList.remove("active-role");
+          btn.classList.add("border-gray-200", "text-gray-500");
+        });
+        const activeBtn = document.getElementById(
+          `btn-role-${role.toLowerCase()}`,
+        );
+        activeBtn.classList.add("active-role");
+        activeBtn.classList.remove("border-gray-200", "text-gray-500");
+      }
+
+      function getDashboardUrl(role) {
+        let dashUrl = "umkm.html";
+        if (role === "admin") dashUrl = "admin.html";
+        if (role === "supplier") dashUrl = "supplier.html";
+        return "../dashboard/" + dashUrl;
+      }
+
+      function consumePostLoginRedirect(role, fallbackUrl) {
+        const redirectUrl = sessionStorage.getItem(POST_LOGIN_REDIRECT_KEY);
+        if (redirectUrl) sessionStorage.removeItem(POST_LOGIN_REDIRECT_KEY);
+
+        return redirectUrl && role === "user" ? redirectUrl : fallbackUrl;
+      }
+
+      function redirectAfterLogin(role) {
+        const fallbackUrl = getDashboardUrl(role);
+        window.location.href = consumePostLoginRedirect(role, fallbackUrl);
+      }
+
+      function getInitialView() {
+        const requestedView = new URLSearchParams(window.location.search).get(
+          "view",
+        );
+        if (views.includes(requestedView)) return requestedView;
+        return requestedView === REGISTER_VIEW_PARAM
+          ? REGISTER_VIEW_PARAM
+          : "login";
+      }
+
+      function openRegisterChoice() {
+        showView("login");
+        Swal.fire({
+          title: "Daftar sebagai",
+          text: "Pilih jenis akun yang ingin Anda buat.",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "UMKM (Pembeli)",
+          cancelButtonText: "Supplier (Penjual)",
+          confirmButtonColor: "#02C39A",
+          cancelButtonColor: "#475569",
+          reverseButtons: true,
+        }).then((result) => {
+          if (result.isConfirmed) {
+            showView("reg-umkm");
+            return;
+          }
+
+          if (result.dismiss === Swal.DismissReason.cancel) {
+            showView("reg-supplier");
+          }
+        });
+      }
+
+      function showInitialView() {
+        const initialView = getInitialView();
+        if (initialView === REGISTER_VIEW_PARAM) {
+          openRegisterChoice();
+          return;
+        }
+
+        showView(initialView);
+      }
+
+      document.getElementById("login-form").addEventListener("submit", (e) => {
+        e.preventDefault();
+        const pass = document.getElementById("login-pass").value;
+        const email = document.getElementById("login-email").value;
+        const errorBox = document.getElementById("login-error");
+        const submitBtn = document.getElementById("login-submit");
+
+        submitBtn.innerText = "Memproses...";
+        submitBtn.disabled = true;
+
+        loginUser(email, pass, currentRole)
+          .then((userSession) => {
+            redirectAfterLogin(userSession.role);
+          })
+          .catch((err) => {
+            errorBox.classList.remove("hidden");
+            document.getElementById("login-error-msg").innerText = err;
+            submitBtn.innerText = "Masuk (Login)";
+            submitBtn.disabled = false;
+          });
+      });
+
+      document
+        .getElementById("form-reg-umkm")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const submitBtn = e.target.querySelector('button[type="submit"]');
+          submitBtn.disabled = true;
+          submitBtn.innerText = "Mendaftar...";
+
+          const inputs = e.target.querySelectorAll("input, textarea");
+          const formData = new FormData();
+          formData.append("role", "user");
+          formData.append("business_name", inputs[0].value);
+          formData.append("email", inputs[1].value);
+          formData.append("password", inputs[2].value);
+          formData.append("address", inputs[3].value); // textarea
+
+          if (e.target.dataset.isGoogle === "true") {
+            formData.append("is_google", "true");
+          }
+
+          try {
+            const response = await fetch(buildApiUrl("/api/auth/register"), {
+              method: "POST",
+              body: formData,
+            });
+            const result = await response.json();
+            if (!response.ok)
+              throw new Error(result.error || "Terjadi kesalahan");
+
+            const isGoogleRegistration = e.target.dataset.isGoogle === "true";
+            document.getElementById("success-title").innerText =
+              "Pendaftaran UMKM Berhasil!";
+            document.getElementById("success-desc").innerText =
+              isGoogleRegistration
+                ? `Kami telah mendaftarkan ${inputs[1].value} ke dalam sistem. Silakan masuk kembali dengan Google.`
+                : `Kami telah mendaftarkan ${inputs[1].value} ke dalam sistem. Silakan login.`;
+            showView("success");
+          } catch (err) {
+            const errorBox = document.getElementById("reg-umkm-error");
+            errorBox.classList.remove("hidden");
+            document.getElementById("reg-umkm-error-msg").innerText =
+              err.message;
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Daftar Sekarang";
+          }
+        });
+
+      document
+        .getElementById("form-reg-supplier")
+        .addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const submitBtn = e.target.querySelector('button[type="submit"]');
+          submitBtn.disabled = true;
+          submitBtn.innerText = "Mengunggah...";
+
+          const inputs = e.target.querySelectorAll("input, select");
+          const fileInput = document.getElementById("file-supplier");
+
+          const formData = new FormData();
+          formData.append("role", "supplier");
+          formData.append("business_name", inputs[0].value);
+          formData.append("email", inputs[1].value);
+          formData.append("password", inputs[2].value);
+          formData.append("category", inputs[3].value);
+          formData.append("region", inputs[4].value);
+          if (fileInput.files.length > 0) {
+            formData.append("document", fileInput.files[0]);
+          }
+
+          if (e.target.dataset.isGoogle === "true") {
+            formData.append("is_google", "true");
+          }
+
+          try {
+            const response = await fetch(buildApiUrl("/api/auth/register"), {
+              method: "POST",
+              body: formData,
+            });
+            const result = await response.json();
+            if (!response.ok)
+              throw new Error(result.error || "Terjadi kesalahan");
+
+            const isGoogleRegistration = e.target.dataset.isGoogle === "true";
+            document.getElementById("success-icon").innerHTML =
+              '<i data-lucide="clock" class="w-8 h-8"></i>';
+            document.getElementById("success-icon").className =
+              "w-16 h-16 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center mx-auto mb-4";
+            document.getElementById("success-title").innerText =
+              "Menunggu Verifikasi";
+            document.getElementById("success-desc").innerText =
+              isGoogleRegistration
+                ? "Dokumen legalitas Anda sedang ditinjau oleh admin. Setelah diverifikasi, masuk kembali dengan Google untuk mengecek status."
+                : "Dokumen legalitas Anda sedang ditinjau oleh admin. Silakan login untuk mengecek status.";
+            showView("success");
+          } catch (err) {
+            const errorBox = document.getElementById("reg-supplier-error");
+            errorBox.classList.remove("hidden");
+            document.getElementById("reg-supplier-error-msg").innerText =
+              err.message;
+          } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerText = "Kirim Dokumen & Daftar";
+          }
+        });
+
+      document
+        .getElementById("file-supplier")
+        .addEventListener("change", (e) => {
+          if (e.target.files.length > 0) {
+            document.getElementById("file-name").innerText =
+              e.target.files[0].name;
+            document.getElementById("file-name").className =
+              "text-xs font-bold text-[#02C39A] mt-1";
+          }
+        });
+
+      function logout() {
+        localStorage.clear();
+        showView("login");
+        showToast("info", toastMessages.logoutSuccess);
+      }
+
+      // --- GOOGLE OAUTH LOGIN ---
+      function loginWithGoogle() {
+        const width = 500;
+        const height = 600;
+        const left = (window.innerWidth - width) / 2;
+        const top = (window.innerHeight - height) / 2;
+
+        // Buka halaman Google Login di jendela baru (popup)
+        window.open(
+          buildApiUrl("/api/auth/google"),
+          "Google Login",
+          `width=${width},height=${height},top=${top},left=${left}`,
+        );
+      }
+
+      // Dengarkan pesan balasan dari popup jendela Google
+      window.addEventListener("message", (event) => {
+        const expectedOrigin = new URL(API_BASE_URL).origin;
+        if (event.origin !== expectedOrigin) return;
+
+        const data = event.data;
+        if (data && data.type === "GOOGLE_LOGIN_SUCCESS") {
+          const userSession = saveUserSessionFromAuthResponse(data);
+          redirectAfterLogin(userSession.role);
+        } else if (data && data.type === "GOOGLE_LOGIN_ERROR") {
+          Swal.fire({
+            title: "Login Google Gagal",
+            text: data.error || "Terjadi kesalahan saat login dengan Google.",
+            icon: "error",
+            confirmButtonColor: "#02C39A",
+          });
+        } else if (data && data.type === "GOOGLE_LOGIN_NEEDS_REGISTRATION") {
+          Swal.fire({
+            title: "Pilih Peran Anda",
+            text: "Email ini belum terdaftar. Anda ingin bergabung sebagai UMKM atau Supplier?",
+            icon: "question",
+            showCancelButton: true,
+            confirmButtonText: "UMKM (Pembeli)",
+            cancelButtonText: "Supplier (Penjual)",
+            confirmButtonColor: "#02C39A",
+            cancelButtonColor: "#475569",
+            reverseButtons: true,
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+          }).then((result) => {
+            let role = result.isConfirmed ? "umkm" : "supplier";
+            let formId =
+              role === "umkm" ? "form-reg-umkm" : "form-reg-supplier";
+            showView(role === "umkm" ? "reg-umkm" : "reg-supplier");
+
+            const form = document.getElementById(formId);
+            const businessInput = form.querySelector('input[type="text"]');
+            if (businessInput && !businessInput.value) {
+              businessInput.value = data.name || "";
+            }
+
+            const emailInput = form.querySelector('input[type="email"]');
+            emailInput.value = data.email;
+            emailInput.readOnly = true;
+            emailInput.classList.add(
+              "bg-gray-100",
+              "text-gray-500",
+              "cursor-not-allowed",
+            );
+
+            const passInput = form.querySelector('input[type="password"]');
+            passInput.style.display = "none";
+            passInput.required = false;
+
+            // Set isGoogle flag
+            form.dataset.isGoogle = "true";
+
+            Swal.fire({
+              title: "Lengkapi Profil",
+              text: `Silakan lengkapi profil Anda sebagai ${role.toUpperCase()} untuk melanjutkan pendaftaran via Google.`,
+              icon: "info",
+              confirmButtonColor: "#02C39A",
+            });
+          });
+        }
+      });
+
+      window.onload = () => {
+        showInitialView();
+      };
+    </script>
+  </body>
+</html>

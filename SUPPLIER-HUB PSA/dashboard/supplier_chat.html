@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="../assets/img/logo.png" type="image/x-icon" />
+    <title>Supplier Hub - Chat UMKM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwindcss.config = {
+        darkMode: "class",
+      };
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/darkmode.js"></script>
+    <link rel="stylesheet" href="../assets/css/darkmode.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+    <style>
+      body {
+        font-family: "Plus Jakarta Sans", sans-serif;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-track {
+        background: #f8fafc;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: #e2e8f0;
+        border-radius: 20px;
+      }
+
+      .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+        background: #cbd5e1;
+      }
+
+      :root.dark body,
+      :root.dark #app-content {
+        background-color: #111827;
+        color: #f3f4f6;
+      }
+
+      :root.dark header,
+      :root.dark .bg-white {
+        background-color: #1f2937;
+      }
+
+      :root.dark .bg-slate-50,
+      :root.dark .bg-\[\#f5f5f5\] {
+        background-color: #374151;
+      }
+
+      :root.dark .text-slate-900 {
+        color: #f3f4f6;
+      }
+
+      :root.dark .text-slate-500,
+      :root.dark .text-slate-600 {
+        color: #d1d5db;
+      }
+
+      :root.dark .border-slate-100,
+      :root.dark .border-slate-200 {
+        border-color: #374151;
+      }
+
+      :root.dark input,
+      :root.dark textarea {
+        background-color: #374151;
+        color: #f3f4f6;
+      }
+
+      :root.dark #sidebar {
+        background-color: #1f2937;
+        border-right-color: #374151;
+      }
+
+      :root.dark .bg-slate-100 {
+        background-color: #374151;
+      }
+
+      :root.dark .text-slate-700,
+      :root.dark .text-slate-800 {
+        color: #e5e7eb;
+      }
+
+      :root.dark .bg-emerald-50,
+      :root.dark .bg-emerald-100 {
+        background-color: rgba(16, 185, 129, 0.14);
+      }
+
+      :root.dark .text-emerald-500,
+      :root.dark .text-emerald-600,
+      :root.dark .text-emerald-700 {
+        color: #34d399;
+      }
+
+      :root.dark .border-emerald-100,
+      :root.dark .border-emerald-200 {
+        border-color: rgba(52, 211, 153, 0.28);
+      }
+
+      :root.dark .hover\:bg-emerald-100:hover {
+        background-color: rgba(16, 185, 129, 0.2);
+      }
+
+      :root.dark .focus\:ring-emerald-50:focus {
+        --tw-ring-color: rgba(16, 185, 129, 0.18);
+      }
+    </style>
+  </head>
+  <body data-chat-role="supplier" class="bg-slate-50 text-slate-900 selection:bg-emerald-100 selection:text-emerald-900 overflow-hidden">
+    <div id="app-content" class="min-h-screen flex invisible"></div>
+    <script src="../assets/js/chat_common.js"></script>
+  </body>
+</html>
