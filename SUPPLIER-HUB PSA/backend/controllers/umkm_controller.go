@@ -244,106 +244,9 @@ func UpdateUserProfile(c *gin.Context) {
 	})
 }
 
-// --- ALGORITMA INTI ---
+// --- ALGORITMA INTI DIHAPUS (Menggunakan Library Standar / Query DB Bawaan) ---
 
-// KMPMatch mengimplementasikan Knuth-Morris-Pratt untuk pencarian string
-func KMPMatch(text string, pattern string) bool {
-	text = strings.ToLower(text)
-	pattern = strings.ToLower(pattern)
-
-	n := len(text)
-	m := len(pattern)
-	if m == 0 {
-		return true
-	}
-
-	lps := make([]int, m)
-	lenLps := 0
-	i := 1
-
-	for i < m {
-		if pattern[i] == pattern[lenLps] {
-			lenLps++
-			lps[i] = lenLps
-			i++
-		} else {
-			if lenLps != 0 {
-				lenLps = lps[lenLps-1]
-			} else {
-				lps[i] = 0
-				i++
-			}
-		}
-	}
-
-	i = 0
-	j := 0
-	for i < n {
-		if pattern[j] == text[i] {
-			j++
-			i++
-		}
-		if j == m {
-			return true
-		} else if i < n && pattern[j] != text[i] {
-			if j != 0 {
-				j = lps[j-1]
-			} else {
-				i++
-			}
-		}
-	}
-	return false
-}
-
-// QuickSortPrice mengimplementasikan Quick Sort untuk mengurutkan harga
-func QuickSortPrice(items []models.Product, low, high int, asc bool) {
-	if low < high {
-		pi := partitionPrice(items, low, high, asc)
-		QuickSortPrice(items, low, pi-1, asc)
-		QuickSortPrice(items, pi+1, high, asc)
-	}
-}
-
-func partitionPrice(items []models.Product, low, high int, asc bool) int {
-	pivot := items[high].Price
-	i := low - 1
-	for j := low; j < high; j++ {
-		if asc {
-			if items[j].Price <= pivot {
-				i++
-				items[i], items[j] = items[j], items[i]
-			}
-		} else {
-			if items[j].Price >= pivot {
-				i++
-				items[i], items[j] = items[j], items[i]
-			}
-		}
-	}
-	items[i+1], items[high] = items[high], items[i+1]
-	return i + 1
-}
-
-// IsItemValid mengimplementasikan Binary Search untuk validasi ketersediaan produk (berdasarkan ID)
-func IsItemValid(sortedIDs []string, targetID string) bool {
-	low, high := 0, len(sortedIDs)-1
-	for low <= high {
-		mid := low + (high-low)/2
-		if sortedIDs[mid] == targetID {
-			return true // Item Valid
-		} else if sortedIDs[mid] < targetID {
-			low = mid + 1
-		} else {
-			high = mid - 1
-		}
-	}
-	return false // Item Tidak Ditemukan / Invalid
-}
-
-// ----------------------
-
-// GetProducts mengambil katalog produk untuk UMKM dengan fitur Pencarian (KMP) dan Sorting (Quick Sort)
+// GetProducts mengambil katalog produk untuk UMKM dengan fitur Pencarian (Standard strings.Contains) dan Sorting (Standard sort.Slice)
 func GetProducts(c *gin.Context) {
 	var allProducts []models.Product
 
@@ -368,17 +271,18 @@ func GetProducts(c *gin.Context) {
 		allProducts[i].ReviewCount = int(stats.Count)
 	}
 
-	// 1. Filtering menggunakan KMP (jika ada query 'search')
+	// 1. Filtering menggunakan Standard library (strings.Contains)
 	searchQuery := c.Query("search")
 	var filteredProducts []models.Product
 
 	if searchQuery != "" {
+		searchQueryLower := strings.ToLower(searchQuery)
 		for _, product := range allProducts {
-			// Mencari kecocokan pattern KMP pada nama produk, kategori, lokasi, atau nama supplier
-			if KMPMatch(product.Name, searchQuery) ||
-				KMPMatch(product.Category, searchQuery) ||
-				KMPMatch(product.Location, searchQuery) ||
-				KMPMatch(product.Supplier.BusinessName, searchQuery) {
+			// Mencari kecocokan menggunakan strings.Contains bawaan Go
+			if strings.Contains(strings.ToLower(product.Name), searchQueryLower) ||
+				strings.Contains(strings.ToLower(product.Category), searchQueryLower) ||
+				strings.Contains(strings.ToLower(product.Location), searchQueryLower) ||
+				strings.Contains(strings.ToLower(product.Supplier.BusinessName), searchQueryLower) {
 				filteredProducts = append(filteredProducts, product)
 			}
 		}
@@ -386,13 +290,17 @@ func GetProducts(c *gin.Context) {
 		filteredProducts = allProducts
 	}
 
-	// 2. Sorting menggunakan Quick Sort (jika ada query 'sort_by')
+	// 2. Sorting menggunakan Standard sort.Slice
 	sortBy := c.Query("sort_by")
 	if len(filteredProducts) > 0 {
 		if sortBy == "price_asc" {
-			QuickSortPrice(filteredProducts, 0, len(filteredProducts)-1, true)
+			sort.Slice(filteredProducts, func(i, j int) bool {
+				return filteredProducts[i].Price < filteredProducts[j].Price
+			})
 		} else if sortBy == "price_desc" {
-			QuickSortPrice(filteredProducts, 0, len(filteredProducts)-1, false)
+			sort.Slice(filteredProducts, func(i, j int) bool {
+				return filteredProducts[i].Price > filteredProducts[j].Price
+			})
 		}
 	}
 
@@ -424,21 +332,19 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 
-	// 1. Tarik semua ID produk yang valid dan pastikan diurutkan dengan aturan Go (ASCII)
-	var sortedIDs []string
-	if err := config.DB.Model(&models.Product{}).Pluck("id", &sortedIDs).Error; err != nil {
+	// 1. Validasi ID Produk langsung dari database (Menggantikan Binary Search)
+	var count int64
+	if err := config.DB.Model(&models.Product{}).Where("id = ?", input.ItemID).Count(&count).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal memvalidasi produk"})
 		return
 	}
-	sort.Strings(sortedIDs)
 
-	// 2. Validasi ID Produk menggunakan Binary Search (Sesuai Aturan PRD 6.3)
-	if !IsItemValid(sortedIDs, input.ItemID) {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Item ID tidak valid atau tidak ditemukan (Binary Search Check Failed)"})
+	if count == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Item ID tidak valid atau tidak ditemukan"})
 		return
 	}
 
-	// 3. Ambil data produk asli dari DB untuk kalkulasi harga
+	// 2. Ambil data produk asli dari DB untuk kalkulasi harga
 	var product models.Product
 	if err := config.DB.First(&product, "id = ?", input.ItemID).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Produk tidak ditemukan"})
